@@ -17,7 +17,6 @@
  */
 package com.github.hamstercommunity.matcher.test;
 
-
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -34,38 +33,33 @@ import org.junit.Test;
  *            the type compared by the {@link TypeSafeDiagnosingMatcher} under
  *            test.
  */
-public abstract class MatcherTestBase<T>
-{
-    @Test(expected = NullPointerException.class)
-    public void testNullObject()
-    {
-        createMatcher(null);
-    }
+public abstract class MatcherTestBase<T> {
+	@Test(expected = NullPointerException.class)
+	public void testNullObject() {
+		createMatcher(null);
+	}
 
-    protected void assertMatch(final T object)
-    {
-        assertThat(object, createMatcher(object));
-        assertThat(getDescription(object), equalTo(getDescription(object)));
-    }
+	protected void assertMatch(final T object) {
+		assertThat(object, createMatcher(object));
+		assertThat(getDescription(object), equalTo(getDescription(object)));
+	}
 
-    protected void assertNoMatch(final T objectA, final T objectB)
-    {
-        assertMatch(objectA);
-        assertMatch(objectB);
-        assertThat(objectA, not(createMatcher(objectB)));
-        assertThat(objectB, not(createMatcher(objectA)));
+	protected void assertNoMatch(final T objectA, final T objectB) {
+		assertMatch(objectA);
+		assertMatch(objectB);
+		assertThat(objectA, not(createMatcher(objectB)));
+		assertThat(objectB, not(createMatcher(objectA)));
 
-        assertThat(getDescription(objectA), not(equalTo(getDescription(objectB))));
-        assertThat(getDescription(objectA), equalTo(getDescription(objectA)));
-        assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
-    }
+		assertThat(getDescription(objectA), not(equalTo(getDescription(objectB))));
+		assertThat(getDescription(objectA), equalTo(getDescription(objectA)));
+		assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
+	}
 
-    protected abstract Matcher<? super T> createMatcher(final T object);
+	protected abstract Matcher<? super T> createMatcher(final T object);
 
-    private String getDescription(final T object)
-    {
-        final StringDescription description = new StringDescription();
-        createMatcher(object).describeTo(description);
-        return description.toString();
-    }
+	private String getDescription(final T object) {
+		final StringDescription description = new StringDescription();
+		createMatcher(object).describeTo(description);
+		return description.toString();
+	}
 }
