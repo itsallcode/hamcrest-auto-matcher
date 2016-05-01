@@ -27,6 +27,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
@@ -123,18 +125,34 @@ public class MatcherConfig<T> {
 				final Function<B, Iterable<? extends P>> propertyAccessor,
 				final Function<P, Matcher<P>> matcherBuilder) {
 			final Iterable<? extends P> expectedPropertyValue = propertyAccessor.apply(this.expected);
-			final Matcher<Iterable<? extends P>> listMatcher;
+			final Matcher<Iterable<? extends P>> listMatcher = createListMatcher(matcherBuilder, expectedPropertyValue);
+			return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
+		}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		private <P> Matcher<Iterable<? extends P>> createListMatcher(final Function<P, Matcher<P>> matcherBuilder,
+				final Iterable<? extends P> expectedPropertyValue) {
+			if (expectedPropertyValue == null) {
+				return new NullIterableMatcher();
+			}
 			if (!expectedPropertyValue.iterator().hasNext()) {
-				listMatcher = Matchers.<P> emptyIterable();
-			} else {
-				final List<Matcher<? super P>> matchers = StreamSupport
-						.stream(expectedPropertyValue.spliterator(), false).map(matcherBuilder)
-						.collect(Collectors.toList());
-				listMatcher = Matchers.contains(matchers);
+				return Matchers.<P> emptyIterable();
+			}
+			final List<Matcher<? super P>> matchers = StreamSupport.stream(expectedPropertyValue.spliterator(), false)
+					.map(matcherBuilder).collect(Collectors.toList());
+			return Matchers.contains(matchers);
+		}
+
+		private static class NullIterableMatcher<T> extends BaseMatcher<Iterable<T>> {
+			@Override
+			public boolean matches(Object item) {
+				return item == null;
 			}
 
-			return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
+			@Override
+			public void describeTo(Description description) {
+				description.appendText("null");
+			}
 		}
 
 		private <P> Builder<B> addPropertyInternal(final String propertyName, final Matcher<P> matcher,
