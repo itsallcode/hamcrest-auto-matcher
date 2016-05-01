@@ -20,6 +20,7 @@ package com.github.hamstercommunity.matcher.test;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -47,7 +48,26 @@ public abstract class MatcherTestBase<T> {
 		assertThat(getDescription(object), equalTo(getDescription(object)));
 	}
 
-	protected void assertNoMatch(final T objectA, final T objectB) {
+	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
+			final T actual) {
+
+		assertNoMatch(expected, actual);
+
+		final String expectedExceptionMessage = "\nExpected: " + expectedDescription + "\n" //
+				+ "     but: " + actualDescription;
+		try {
+			assertThat(actual, createMatcher(expected));
+			fail("Expected AssertionError");
+		} catch (final AssertionError e) {
+			assertThat(e, instanceOf(AssertionError.class));
+			assertEquals(expectedExceptionMessage, e.getMessage());
+			assertThat(e.getMessage(), equalTo(expectedExceptionMessage));
+		}
+	}
+
+	protected abstract Matcher<? super T> createMatcher(final T object);
+
+	private void assertNoMatch(final T objectA, final T objectB) {
 		assertMatch(objectA);
 		assertMatch(objectB);
 		assertThat(objectA, not(createMatcher(objectB)));
@@ -57,21 +77,6 @@ public abstract class MatcherTestBase<T> {
 		assertThat(getDescription(objectA), equalTo(getDescription(objectA)));
 		assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
 	}
-
-	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
-			final T actual) {
-		final String expectedExceptionMessage = "\nExpected: " + expectedDescription + "\n" //
-				+ "     but: " + actualDescription;
-		try {
-			assertThat(actual, createMatcher(expected));
-			fail("Expected AssertionError");
-		} catch (final AssertionError e) {
-			assertThat(e, instanceOf(AssertionError.class));
-			assertThat(e.getMessage(), equalTo(expectedExceptionMessage));
-		}
-	}
-
-	protected abstract Matcher<? super T> createMatcher(final T object);
 
 	private String getDescription(final T object) {
 		final StringDescription description = new StringDescription();
