@@ -20,6 +20,7 @@ package com.github.hamstercommunity.matcher;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ public class MatcherConfig<T> {
 
 	private MatcherConfig(final T expected, final List<PropertyConfig<T, ?>> propertyConfigs) {
 		this.expected = expected;
-		this.propertyConfigs = propertyConfigs;
+		this.propertyConfigs = Collections.unmodifiableList(propertyConfigs);
 	}
 
 	T getExpected() {
@@ -44,7 +45,9 @@ public class MatcherConfig<T> {
 
 	@SuppressWarnings("unchecked")
 	List<PropertyConfig<T, Object>> getPropertyConfigs() {
-		return this.propertyConfigs.stream().map(c -> (PropertyConfig<T, Object>) c).collect(toList());
+		return this.propertyConfigs.stream() //
+				.map(c -> (PropertyConfig<T, Object>) c) //
+				.collect(toList());
 	}
 
 	public static <B> Builder<B> builder(final B expected) {
