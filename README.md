@@ -1,6 +1,7 @@
 # hamcrest-auto-matcher
 
 [![Build Status](https://travis-ci.org/hamstercommunity/hamcrest-auto-matcher.svg?branch=master)](https://travis-ci.org/hamstercommunity/hamcrest-auto-matcher)
+[![Download](https://api.bintray.com/packages/kaklakariada/maven/hamcrest-auto-matcher/images/download.svg)](https://bintray.com/kaklakariada/maven/hamcrest-auto-matcher/_latestVersion)
 
 Automatic hamcrest matcher for model classes
 
