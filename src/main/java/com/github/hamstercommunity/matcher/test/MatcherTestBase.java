@@ -17,16 +17,16 @@
  */
 package com.github.hamstercommunity.matcher.test;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
@@ -36,9 +36,6 @@ import org.junit.rules.ExpectedException;
  *            test.
  */
 public abstract class MatcherTestBase<T> {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Test(expected = NullPointerException.class)
 	public void testNullObject() {
@@ -63,12 +60,15 @@ public abstract class MatcherTestBase<T> {
 
 	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
 			final T actual) {
-		thrown.expect(AssertionError.class);
-		final String expectedExceptionMessage = "Expected: " + expectedDescription + "\n" //
+		final String expectedExceptionMessage = "\nExpected: " + expectedDescription + "\n" //
 				+ "     but: " + actualDescription;
-		System.out.println(expectedExceptionMessage);
-		thrown.expectMessage(expectedExceptionMessage);
-		assertThat(actual, createMatcher(expected));
+		try {
+			assertThat(actual, createMatcher(expected));
+			fail("Expected AssertionError");
+		} catch (final AssertionError e) {
+			assertThat(e, instanceOf(AssertionError.class));
+			assertThat(e.getMessage(), equalTo(expectedExceptionMessage));
+		}
 	}
 
 	protected abstract Matcher<? super T> createMatcher(final T object);
