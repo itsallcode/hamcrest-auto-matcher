@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.hamstercommunity.matcher;
+package com.github.hamstercommunity.matcher.test;
 
 
 import static org.hamcrest.core.IsEqual.equalTo;
