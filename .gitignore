@@ -3,3 +3,4 @@
 .classpath
 bin/
 build/
+gradle.properties
