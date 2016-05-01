@@ -9,7 +9,7 @@ public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 		super(MatcherConfig.builder(expected) //
 				.addEqualsProperty("id", DemoModel::getId) //
 				.addEqualsProperty("name", DemoModel::getName) //
-				.addProperty("attribute", DemoModel::getAttribute, DemoAttributeMatcher::equalTo) //
+				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
 				.addIterableProperty("children", DemoModel::getChildren, DemoModelMatcher::equalTo) //
 				.build());
 	}

@@ -24,7 +24,9 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
@@ -34,6 +36,10 @@ import org.junit.Test;
  *            test.
  */
 public abstract class MatcherTestBase<T> {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Test(expected = NullPointerException.class)
 	public void testNullObject() {
 		createMatcher(null);
@@ -53,6 +59,16 @@ public abstract class MatcherTestBase<T> {
 		assertThat(getDescription(objectA), not(equalTo(getDescription(objectB))));
 		assertThat(getDescription(objectA), equalTo(getDescription(objectA)));
 		assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
+	}
+
+	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
+			final T actual) {
+		thrown.expect(AssertionError.class);
+		final String expectedExceptionMessage = "Expected: " + expectedDescription + "\n" //
+				+ "     but: " + actualDescription;
+		System.out.println(expectedExceptionMessage);
+		thrown.expectMessage(expectedExceptionMessage);
+		assertThat(actual, createMatcher(expected));
 	}
 
 	protected abstract Matcher<? super T> createMatcher(final T object);

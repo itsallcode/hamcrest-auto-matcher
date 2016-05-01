@@ -10,4 +10,9 @@ public class DemoAttribute {
 	public String getValue() {
 		return value;
 	}
+
+	@Override
+	public String toString() {
+		return "DemoAttribute [value=" + value + "]";
+	}
 }
