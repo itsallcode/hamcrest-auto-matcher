@@ -10,6 +10,11 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    compile 'junit:junit:4.12'
+    compile 'org.hamcrest:hamcrest-all:1.3'
+}
+
 group 'com.github.kaklakariada'
 version = '0.0.1'
 sourceCompatibility = 1.8
