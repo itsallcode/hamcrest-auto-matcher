@@ -17,15 +17,22 @@
  */
 package com.github.hamstercommunity.matcher.auto;
 
+import static java.util.Arrays.asList;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 import com.github.hamstercommunity.matcher.config.MatcherConfig.Builder;
 
 class AutoConfigBuilder<T> {
+
+	private final static Logger LOG = Logger.getLogger(AutoConfigBuilder.class.getName());
 
 	private final T expected;
 	private final Builder<T> configBuilder;
@@ -37,10 +44,17 @@ class AutoConfigBuilder<T> {
 
 	MatcherConfig<T> build() {
 		Arrays.stream(expected.getClass().getMethods()) //
+				.filter(this::isNotBlackListed) //
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
 				.forEach(this::addConfigForGetter);
 		return configBuilder.build();
+	}
+
+	private boolean isNotBlackListed(Method method) {
+		final Set<String> blacklist = new HashSet<>(
+				asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
+		return !blacklist.contains(method.getName());
 	}
 
 	private boolean isGetterMethodSignature(Method method) {
@@ -59,17 +73,23 @@ class AutoConfigBuilder<T> {
 		final String propertyName = getPropertyName(method.getName());
 
 		if (isSimpleType(propertyType)) {
+			// LOG.info(() -> "Adding property '" + propertyName + "' with
+			// simple type " + propertyType.getName());
 			configBuilder.addEqualsProperty(propertyName, createGetter(method));
 		} else if (isIterableType(propertyType)) {
+			LOG.info(() -> "Adding iterable property '" + propertyName + "' with member type "
+					+ method.getGenericReturnType().getTypeName());
+
 			// configBuilder.addIterableProperty(propertyName,
 			// createGetter(method), )
 		} else {
+			LOG.info(() -> "Adding general property '" + propertyName + "' with type " + propertyType);
 			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		}
 	}
 
 	private boolean isIterableType(Class<?> propertyType) {
-		return propertyType.isInstance(Iterable.class);
+		return Iterable.class.isAssignableFrom(propertyType);
 	}
 
 	private <P> Function<T, P> createGetter(Method method) {
@@ -79,7 +99,7 @@ class AutoConfigBuilder<T> {
 	private boolean isSimpleType(Class<? extends Object> type) {
 		return type.isPrimitive() //
 				|| type.isEnum() //
-				|| type.isInstance(String.class);
+				|| String.class.isAssignableFrom(type);
 	}
 
 	private String getPropertyName(String methodName) {
