@@ -32,7 +32,7 @@ public abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosin
 	}
 
 	@Override
-	public void describeTo(final Description description) {
+	public final void describeTo(final Description description) {
 		final DescriptionBuilder builder = DescriptionBuilder.start(description);
 		describeTo(builder);
 		builder.close();
@@ -47,7 +47,7 @@ public abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosin
 	protected abstract void describeTo(DescriptionBuilder description);
 
 	@Override
-	protected boolean matchesSafely(final T actual, final Description mismatchDescription) {
+	protected final boolean matchesSafely(final T actual, final Description mismatchDescription) {
 		final MismatchReporter mismatchReporter = MismatchReporter.start(mismatchDescription);
 		reportMismatches(actual, mismatchReporter);
 		return mismatchReporter.finishAndCheckMatching();

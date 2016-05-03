@@ -21,10 +21,10 @@ import com.github.hamstercommunity.matcher.BaseTypeSafeDiagnosingMatcher;
 import com.github.hamstercommunity.matcher.DescriptionBuilder;
 import com.github.hamstercommunity.matcher.MismatchReporter;
 
-public abstract class ConfigurableMatcher<T> extends BaseTypeSafeDiagnosingMatcher<T> {
+public class ConfigurableMatcher<T> extends BaseTypeSafeDiagnosingMatcher<T> {
 	private final MatcherConfig<T> config;
 
-	protected ConfigurableMatcher(final MatcherConfig<T> config) {
+	public ConfigurableMatcher(final MatcherConfig<T> config) {
 		super(config.getExpected());
 		this.config = config;
 	}
