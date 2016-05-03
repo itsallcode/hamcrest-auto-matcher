@@ -19,6 +19,11 @@ package com.github.hamstercommunity.matcher.model;
 
 import java.util.List;
 
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
+
+/**
+ * A model class used for testing and demonstrating {@link ConfigurableMatcher}.
+ */
 public class DemoModel {
 	private final int id;
 	private final String name;

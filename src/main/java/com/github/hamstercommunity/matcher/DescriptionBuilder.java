@@ -41,15 +41,21 @@ public class DescriptionBuilder {
 	}
 
 	public DescriptionBuilder append(final String message, final SelfDescribing matcher) {
-		if (!this.firstElement) {
-			this.description.appendText(", ");
-		}
-		this.description.appendText(message).appendText("=").appendDescriptionOf(matcher);
-		this.firstElement = false;
+		appendComma();
+		this.description.appendText(message) //
+				.appendText("=") //
+				.appendDescriptionOf(matcher);
 		return this;
 	}
 
-	public void close() {
+	private void appendComma() {
+		if (!this.firstElement) {
+			this.description.appendText(", ");
+		}
+		this.firstElement = false;
+	}
+
+	void close() {
 		this.description.appendText("}");
 	}
 }

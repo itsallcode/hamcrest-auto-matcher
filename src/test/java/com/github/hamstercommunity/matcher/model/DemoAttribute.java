@@ -17,6 +17,11 @@
  */
 package com.github.hamstercommunity.matcher.model;
 
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
+
+/**
+ * A model class used for testing and demonstrating {@link ConfigurableMatcher}.
+ */
 public class DemoAttribute {
 	private final String value;
 

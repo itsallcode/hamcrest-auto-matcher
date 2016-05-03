@@ -26,8 +26,13 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.test.MatcherTestBase;
 
+/**
+ * This tests {@link ConfigurableMatcher} and demonstrates usage of
+ * {@link MatcherTestBase}.
+ */
 public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 
 	private static final int ID1 = 4711;
@@ -46,24 +51,6 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 			+ "\"}, children=an empty iterable}";
 	private static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1 + "\", attr={value=\""
 			+ ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "]}";
-
-	// java.lang.AssertionError:
-	// Expected: (an instance of java.lang.AssertionError and exception with
-	// message a string containing "Expected: {id=<4711>, name=\"name1\",
-	// attr=null, children=null}\n but: {children was <[DemoModel [id=4242,
-	// name=null, attr=null, children=null]]>}")
-	// but: exception with message a string containing "Expected: {id=<4711>,
-	// name=\"name1\", attr=null, children=null}\n but: {children was
-	// <[DemoModel [id=4242, name=null, attr=null, children=null]]>}" message
-	// was "
-	// Expected: {id=<4711>, name="name1", attr={value="attrValue1"},
-	// children=iterable containing [{id=<4242>, name="name2",
-	// attr={value="attrValue2"}, children=an empty iterable}]}
-	// but: {children item 0: {attr was null}}"
-	// Stacktrace was: java.lang.AssertionError:
-	// Expected: {id=<4711>, name="name1", attr={value="attrValue1"},
-	// children=iterable containing [{id=<4242>, name="name2",
-	// attr={value="attrValue2"}, children=an empty iterable}]}
 
 	private DemoModel expectedSimpleModel;
 	private DemoModel expectedComplexModel;

@@ -48,6 +48,19 @@ public abstract class MatcherTestBase<T> {
 		assertThat(getDescription(object), equalTo(getDescription(object)));
 	}
 
+	/**
+	 * Verify that matching expected and actual fails with the correct error
+	 * message.
+	 * 
+	 * @param expectedDescription
+	 *            the description of the expected object
+	 * @param actualDescription
+	 *            the description of the actual object
+	 * @param expected
+	 *            the expected object being compared
+	 * @param actual
+	 *            the actual object being compared
+	 */
 	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
 			final T actual) {
 
@@ -65,7 +78,14 @@ public abstract class MatcherTestBase<T> {
 		}
 	}
 
-	protected abstract Matcher<? super T> createMatcher(final T object);
+	/**
+	 * Create a matcher for the given expected object.
+	 * 
+	 * @param expected
+	 *            the expected object
+	 * @return a matcher for the given expected object
+	 */
+	protected abstract Matcher<? super T> createMatcher(final T expected);
 
 	private void assertNoMatch(final T objectA, final T objectB) {
 		assertMatch(objectA);

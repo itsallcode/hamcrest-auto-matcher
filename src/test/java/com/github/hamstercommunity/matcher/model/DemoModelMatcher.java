@@ -20,6 +20,10 @@ package com.github.hamstercommunity.matcher.model;
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 
+/**
+ * A matcher for {@link DemoModel} used for testing {@link ConfigurableMatcher}
+ * and demonstrating its usage.
+ */
 public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 
 	private DemoModelMatcher(DemoModel expected) {

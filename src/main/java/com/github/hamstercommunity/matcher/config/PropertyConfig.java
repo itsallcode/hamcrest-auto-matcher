@@ -22,10 +22,13 @@ import java.util.function.Function;
 import org.hamcrest.Matcher;
 
 /**
+ * This is used by {@link MatcherConfig} to store configuration for a single
+ * property.
+ * 
  * @param <T>
- *            base type of the {@link Matcher}
+ *            type of the object that is handled by the matcher
  * @param <P>
- *            type of the property
+ *            type of the object's property
  */
 class PropertyConfig<T, P> {
 	private final String propertyName;
