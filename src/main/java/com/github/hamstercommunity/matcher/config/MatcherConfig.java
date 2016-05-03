@@ -129,11 +129,10 @@ public class MatcherConfig<T> {
 			return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
 		}
 
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private <P> Matcher<Iterable<? extends P>> createListMatcher(final Function<P, Matcher<P>> matcherBuilder,
 				final Iterable<? extends P> expectedPropertyValue) {
 			if (expectedPropertyValue == null) {
-				return new NullIterableMatcher();
+				return createNullIterableMatcher();
 			}
 			if (!expectedPropertyValue.iterator().hasNext()) {
 				return Matchers.<P> emptyIterable();
@@ -143,16 +142,9 @@ public class MatcherConfig<T> {
 			return Matchers.contains(matchers);
 		}
 
-		private static class NullIterableMatcher<T> extends BaseMatcher<Iterable<T>> {
-			@Override
-			public boolean matches(Object item) {
-				return item == null;
-			}
-
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("null");
-			}
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		private <P> Matcher<Iterable<? extends P>> createNullIterableMatcher() {
+			return new NullIterableMatcher();
 		}
 
 		private <P> Builder<B> addPropertyInternal(final String propertyName, final Matcher<P> matcher,
@@ -168,6 +160,18 @@ public class MatcherConfig<T> {
 		 */
 		public MatcherConfig<B> build() {
 			return new MatcherConfig<B>(this.expected, new ArrayList<>(this.properties));
+		}
+	}
+
+	private static class NullIterableMatcher<T> extends BaseMatcher<Iterable<T>> {
+		@Override
+		public boolean matches(Object item) {
+			return item == null;
+		}
+
+		@Override
+		public void describeTo(Description description) {
+			description.appendText("null");
 		}
 	}
 }
