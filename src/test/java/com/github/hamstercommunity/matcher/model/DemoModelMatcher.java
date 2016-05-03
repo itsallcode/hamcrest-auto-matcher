@@ -17,8 +17,8 @@
  */
 package com.github.hamstercommunity.matcher.model;
 
-import com.github.hamstercommunity.matcher.ConfigurableMatcher;
-import com.github.hamstercommunity.matcher.MatcherConfig;
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
+import com.github.hamstercommunity.matcher.config.MatcherConfig;
 
 public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 

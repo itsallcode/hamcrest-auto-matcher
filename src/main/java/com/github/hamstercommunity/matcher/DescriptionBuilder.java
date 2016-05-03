@@ -27,7 +27,7 @@ import org.hamcrest.SelfDescribing;
  * {@link org.hamcrest.TypeSafeDiagnosingMatcher.TypeSafeDiagnosingMatcher#describeTo(Description)}
  * .
  */
-class DescriptionBuilder {
+public class DescriptionBuilder {
 	private final Description description;
 	private boolean firstElement = true;
 

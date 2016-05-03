@@ -20,7 +20,7 @@ package com.github.hamstercommunity.matcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-class MismatchReporter {
+public class MismatchReporter {
 	private final Description mismatchDescription;
 	private boolean firstMismatch = true;
 	private boolean matches = true;
