@@ -7,6 +7,8 @@ Automatic hamcrest matcher for model classes
 
 ## Usage
 
+### Setup dependencies
+
 * Add jcenter maven repository:
 ```groovy
 repositories {
@@ -16,10 +18,25 @@ repositories {
 * Add dependency
 ```groovy
 dependencies {
-    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.0.1'
+    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.2.0'
 }
 ```
-* Create a matcher by extending [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/ConfigurableMatcher.java), see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
+```xml
+<dependency>
+	<groupId>com.github.kaklakariada</groupId>
+	<artifactId>hamcrest-auto-matcher</artifactId>
+	<version>0.2.0</version>
+	<scope>test</scope>
+</dependency>
+```
+
+### Using `ConfigurableMatcher`
+Create a matcher for your model class by extending [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/ConfigurableMatcher.java), see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
+
+This allows you to specify properties and custom property matchers.
+
+### Using `AutoMatcher` 
+Use [`AutoMatcher.equalTo()`](src/main/java/com/github/hamstercommunity/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine the expected values based on getter methods.
 
 ## Development
 
