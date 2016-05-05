@@ -50,7 +50,9 @@ class AutoConfigBuilder<T> {
 				.filter(this::isNotBlackListed) //
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
-				.sorted(Comparator.comparing(Method::getName)) //
+				.sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
+						.thenComparing(this::hasIterableReturnType) //
+						.thenComparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
 		return configBuilder.build();
 	}
@@ -76,10 +78,10 @@ class AutoConfigBuilder<T> {
 		final Class<?> propertyType = method.getReturnType();
 		final String propertyName = getPropertyName(method.getName());
 
-		if (isSimpleType(propertyType)) {
+		if (hasSimpleReturnType(method)) {
 			LOG.info(() -> "Adding property '" + propertyName + "' with simple type " + propertyType.getName());
 			configBuilder.addEqualsProperty(propertyName, createGetter(method));
-		} else if (isIterableType(propertyType)) {
+		} else if (hasIterableReturnType(method)) {
 			final Type iterableMemberType = ((ParameterizedType) method.getGenericReturnType())
 					.getActualTypeArguments()[0];
 			LOG.info(() -> {
@@ -97,8 +99,16 @@ class AutoConfigBuilder<T> {
 				&& propertyType.getTypeParameters().length == 1;
 	}
 
+	private boolean hasIterableReturnType(Method method) {
+		return isIterableType(method.getReturnType());
+	}
+
 	private <P> Function<T, P> createGetter(Method method) {
 		return (object) -> getPropertyValue(method, object);
+	}
+
+	private boolean hasSimpleReturnType(Method method) {
+		return isSimpleType(method.getReturnType());
 	}
 
 	private boolean isSimpleType(Class<? extends Object> type) {

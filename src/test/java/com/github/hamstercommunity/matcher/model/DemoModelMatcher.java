@@ -28,10 +28,10 @@ public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 
 	private DemoModelMatcher(DemoModel expected) {
 		super(MatcherConfig.builder(expected) //
-				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
-				.addIterableProperty("children", DemoModel::getChildren, DemoModelMatcher::equalTo) //
 				.addEqualsProperty("id", DemoModel::getId) //
 				.addEqualsProperty("name", DemoModel::getName) //
+				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
+				.addIterableProperty("children", DemoModel::getChildren, DemoModelMatcher::equalTo) //
 				.build());
 	}
 

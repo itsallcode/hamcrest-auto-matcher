@@ -26,6 +26,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.test.MatcherTestBase;
 
@@ -45,12 +46,12 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	private static final String ATTR2 = "attrValue2";
 	private static final String ATTR3 = "attrValue3";
 
-	private static String SIMPLE_MODEL_DESCRIPTION = "{attr=null, children=null, id=<" + ID1 + ">, name=\"" + NAME1
-			+ "\"}";
-	private static final String CHILD1 = "{attr={value=\"" + ATTR2 + "\"}, children=an empty iterable, id=<" + ID2
-			+ ">, name=\"" + NAME2 + "\"}";
-	private static String COMPLEX_MODEL_DESCRIPTION = "{attr={value=\"" + ATTR1 + "\"}, children=iterable containing ["
-			+ CHILD1 + "], id=<" + ID1 + ">, name=\"" + NAME1 + "\"}";
+	private static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1
+			+ "\", attr=null, children=null}";
+	private static final String CHILD1 = "{id=<" + ID2 + ">, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
+			+ "\"}, children=an empty iterable}";
+	private static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1 + "\", attr={value=\""
+			+ ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "]}";
 
 	private DemoModel expectedSimpleModel;
 	private DemoModel expectedComplexModel;
@@ -213,8 +214,8 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 
 	@Override
 	protected Matcher<? super DemoModel> createMatcher(DemoModel expected) {
-		return DemoModelMatcher.equalTo(expected);
-		// return AutoMatcher.equalTo(expected);
+		// return DemoModelMatcher.equalTo(expected);
+		return AutoMatcher.equalTo(expected);
 	}
 
 	private DemoModel model(int id, String name, DemoAttribute attribute, List<DemoModel> children) {
