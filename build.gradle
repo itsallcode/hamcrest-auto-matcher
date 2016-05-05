@@ -45,6 +45,12 @@ publishing {
             groupId project.group
             artifactId project.name
             version project.version
+            pom.withXml {
+                asNode().appendNode('licenses').appendNode('license').
+                         appendNode('name', 'GPLv3').parent().
+                         appendNode('url', 'https://www.gnu.org/licenses/gpl-3.0.html').parent().
+                         appendNode('distribution', 'repo')
+            }
         }
     }
 }
