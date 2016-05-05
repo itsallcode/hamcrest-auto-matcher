@@ -24,9 +24,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.function.Function;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.j8unit.J8UnitTest;
 import org.junit.Test;
 
 /**
@@ -36,14 +39,14 @@ import org.junit.Test;
  *            the type compared by the {@link TypeSafeDiagnosingMatcher} under
  *            test.
  */
-public abstract class MatcherTestBase<T> {
+public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> {
 
 	@Test(expected = NullPointerException.class)
-	public void testNullObject() {
+	public default void testNullObject() {
 		createMatcher(null);
 	}
 
-	protected void assertMatch(final T object) {
+	default void assertMatch(final T object) {
 		assertThat(object, createMatcher(object));
 		assertThat(getDescription(object), equalTo(getDescription(object)));
 	}
@@ -61,7 +64,7 @@ public abstract class MatcherTestBase<T> {
 	 * @param actual
 	 *            the actual object being compared
 	 */
-	protected void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
+	default void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
 			final T actual) {
 
 		assertNoMatch(expected, actual);
@@ -85,9 +88,11 @@ public abstract class MatcherTestBase<T> {
 	 *            the expected object
 	 * @return a matcher for the given expected object
 	 */
-	protected abstract Matcher<? super T> createMatcher(final T expected);
+	default Matcher<? super T> createMatcher(final T expected) {
+		return createNewSUT().apply(expected);
+	}
 
-	private void assertNoMatch(final T objectA, final T objectB) {
+	default void assertNoMatch(final T objectA, final T objectB) {
 		assertMatch(objectA);
 		assertMatch(objectB);
 		assertThat(objectA, not(createMatcher(objectB)));
@@ -98,7 +103,7 @@ public abstract class MatcherTestBase<T> {
 		assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
 	}
 
-	private String getDescription(final T object) {
+	default String getDescription(final T object) {
 		final StringDescription description = new StringDescription();
 		createMatcher(object).describeTo(description);
 		return description.toString();
