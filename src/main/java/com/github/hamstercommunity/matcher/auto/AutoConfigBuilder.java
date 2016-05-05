@@ -21,8 +21,6 @@ import static java.util.Arrays.asList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -79,28 +77,21 @@ class AutoConfigBuilder<T> {
 		final String propertyName = getPropertyName(method.getName());
 
 		if (hasSimpleReturnType(method)) {
-			LOG.info(() -> "Adding property '" + propertyName + "' with simple type " + propertyType.getName());
+			LOG.finest(() -> "Adding property '" + propertyName + "' with simple type " + propertyType.getName());
 			configBuilder.addEqualsProperty(propertyName, createGetter(method));
 		} else if (hasIterableReturnType(method)) {
-			final Type iterableMemberType = ((ParameterizedType) method.getGenericReturnType())
-					.getActualTypeArguments()[0];
-			LOG.info(() -> {
-				return "Adding iterable property '" + propertyName + "' with member type " + iterableMemberType;
-			});
+			LOG.finest(() -> "Adding iterable property '" + propertyName + "'");
 			configBuilder.addIterableProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		} else {
-			LOG.info(() -> "Adding general property '" + propertyName + "' with type " + propertyType);
+			LOG.finest(() -> "Adding general property '" + propertyName + "' with type " + propertyType);
 			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		}
 	}
 
-	private boolean isIterableType(Class<?> propertyType) {
+	private boolean hasIterableReturnType(Method method) {
+		final Class<?> propertyType = method.getReturnType();
 		return Iterable.class.isAssignableFrom(propertyType) //
 				&& propertyType.getTypeParameters().length == 1;
-	}
-
-	private boolean hasIterableReturnType(Method method) {
-		return isIterableType(method.getReturnType());
 	}
 
 	private <P> Function<T, P> createGetter(Method method) {
@@ -108,10 +99,7 @@ class AutoConfigBuilder<T> {
 	}
 
 	private boolean hasSimpleReturnType(Method method) {
-		return isSimpleType(method.getReturnType());
-	}
-
-	private boolean isSimpleType(Class<? extends Object> type) {
+		final Class<? extends Object> type = method.getReturnType();
 		return type.isPrimitive() //
 				|| type.isEnum() //
 				|| String.class.isAssignableFrom(type);
