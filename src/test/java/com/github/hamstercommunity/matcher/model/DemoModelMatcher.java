@@ -29,6 +29,7 @@ public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 	private DemoModelMatcher(DemoModel expected) {
 		super(MatcherConfig.builder(expected) //
 				.addEqualsProperty("id", DemoModel::getId) //
+				.addEqualsProperty("longVal", DemoModel::getLongVal) //
 				.addEqualsProperty("name", DemoModel::getName) //
 				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
 				.addEqualsProperty("stringArray", DemoModel::getStringArray)

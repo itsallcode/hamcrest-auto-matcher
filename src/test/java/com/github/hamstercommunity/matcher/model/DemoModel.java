@@ -31,10 +31,13 @@ public class DemoModel {
 	private final DemoAttribute attr;
 	private final List<DemoModel> children;
 	private final String[] stringArray;
+	private final Long longVal;
 
-	public DemoModel(int id, String name, DemoAttribute attr, String[] stringArray, List<DemoModel> children) {
+	public DemoModel(int id, String name, Long longVal, DemoAttribute attr, String[] stringArray,
+			List<DemoModel> children) {
 		this.id = id;
 		this.name = name;
+		this.longVal = longVal;
 		this.attr = attr;
 		this.stringArray = stringArray;
 		this.children = children;
@@ -60,9 +63,13 @@ public class DemoModel {
 		return stringArray;
 	}
 
+	public Long getLongVal() {
+		return longVal;
+	}
+
 	@Override
 	public String toString() {
 		return "DemoModel [id=" + id + ", name=" + name + ", attr=" + attr + ", children=" + children + ", stringArray="
-				+ Arrays.toString(stringArray) + "]";
+				+ Arrays.toString(stringArray) + ", longVal=" + longVal + "]";
 	}
 }

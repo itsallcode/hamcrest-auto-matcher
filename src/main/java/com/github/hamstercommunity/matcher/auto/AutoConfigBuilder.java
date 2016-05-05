@@ -102,7 +102,8 @@ class AutoConfigBuilder<T> {
 		final Class<? extends Object> type = method.getReturnType();
 		return type.isPrimitive() //
 				|| type.isEnum() //
-				|| String.class.isAssignableFrom(type);
+				|| String.class.isAssignableFrom(type) //
+				|| Long.class.isAssignableFrom(type);
 	}
 
 	private String getPropertyName(String methodName) {

@@ -44,12 +44,12 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	static final String ATTR2 = "attrValue2";
 	static final String ATTR3 = "attrValue3";
 
-	static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1
+	static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1
 			+ "\", attr=null, stringArray=null, children=null}";
-	static final String CHILD1 = "{id=<" + ID2 + ">, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
+	static final String CHILD1 = "{id=<" + ID2 + ">, longVal=null, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
 			+ "\"}, stringArray=null, children=an empty iterable}";
-	static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1 + "\", attr={value=\"" + ATTR1
-			+ "\"}, stringArray=null, children=iterable containing [" + CHILD1 + "]}";
+	static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1 + "\", attr={value=\""
+			+ ATTR1 + "\"}, stringArray=null, children=iterable containing [" + CHILD1 + "]}";
 
 	@Test
 	default void testMatchAllNull() {
@@ -121,10 +121,11 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 
 	@Test
 	default void testMessageSimpleFilledChildList() {
+		final List<DemoModel> actualChildren = asList(model(ID2, null, null, null));
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
-				"{children was <[DemoModel [id=" + ID2 + ", name=null, attr=null, children=null, stringArray=null]]>}", //
+				"{children was <" + actualChildren.toString() + ">}", //
 				expectedSimpleModel(), //
-				model(ID1, NAME1, null, asList(model(ID2, null, null, null))));
+				model(ID1, NAME1, null, actualChildren));
 	}
 
 	@Test
@@ -193,13 +194,13 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 
 	@Test
 	default void testMessageComplexAdditionalChild() {
+		final DemoModel unmatchedChild = model(ID3, NAME3, null, null);
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
-				"{children Not matched: <DemoModel [id=" + ID3 + ", name=" + NAME3
-						+ ", attr=null, children=null, stringArray=null]>}", //
+				"{children Not matched: <" + unmatchedChild.toString() + ">}", //
 				expectedComplexModel(), //
 				model(ID1, NAME1, attr(ATTR1), //
 						asList(model(ID2, NAME2, attr(ATTR2), emptyList()), //
-								model(ID3, NAME3, null, null))));
+								unmatchedChild)));
 	}
 
 	@Test
@@ -242,6 +243,14 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 				modelWithStringArray(new String[] { "val1", "val2", "val3" }));
 	}
 
+	@Test
+	default void testMessageLongValue() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{longVal was <42L>}", //
+				expectedSimpleModel(), //
+				modelWithLongVal(42L));
+	}
+
 	static DemoModel expectedSimpleModel() {
 		return model(ID1, NAME1, null, null);
 	}
@@ -251,11 +260,15 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	static DemoModel modelWithStringArray(String[] array) {
-		return new DemoModel(ID1, NAME1, null, array, null);
+		return new DemoModel(ID1, NAME1, null, null, array, null);
+	}
+
+	static DemoModel modelWithLongVal(Long val) {
+		return new DemoModel(ID1, NAME1, val, null, null, null);
 	}
 
 	static DemoModel model(int id, String name, DemoAttribute attribute, List<DemoModel> children) {
-		return new DemoModel(id, name, attribute, null, children);
+		return new DemoModel(id, name, null, attribute, null, children);
 	}
 
 	static DemoAttribute attr(String value) {
