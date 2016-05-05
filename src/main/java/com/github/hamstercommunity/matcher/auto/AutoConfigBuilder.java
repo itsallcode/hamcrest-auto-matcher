@@ -54,6 +54,7 @@ class AutoConfigBuilder<T> {
 				.filter(this::isGetterMethodSignature) //
 				.sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
 						.thenComparing(this::hasIterableReturnType) //
+						.thenComparing(this::hasArrayReturnType) //
 						.thenComparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
 		return configBuilder.build();
@@ -90,6 +91,10 @@ class AutoConfigBuilder<T> {
 			LOG.finest(() -> "Adding general property '" + propertyName + "' with type " + propertyType);
 			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		}
+	}
+
+	private boolean hasArrayReturnType(Method method) {
+		return method.getReturnType().isArray();
 	}
 
 	private boolean hasIterableReturnType(Method method) {
