@@ -175,16 +175,4 @@ public class MatcherConfig<T> {
 			description.appendText("null");
 		}
 	}
-
-	private static class NullArrayMatcher<T> extends BaseMatcher<T[]> {
-		@Override
-		public boolean matches(Object item) {
-			return item == null;
-		}
-
-		@Override
-		public void describeTo(Description description) {
-			description.appendText("null");
-		}
-	}
 }

@@ -22,6 +22,7 @@ import static java.util.Arrays.asList;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +35,9 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig.Builder;
 class AutoConfigBuilder<T> {
 
 	private final static Logger LOG = Logger.getLogger(AutoConfigBuilder.class.getName());
+
+	private final static Set<Class<?>> SIMPLE_TYPES = Collections
+			.unmodifiableSet(new HashSet<>(asList(String.class, Long.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
@@ -100,10 +104,15 @@ class AutoConfigBuilder<T> {
 
 	private boolean hasSimpleReturnType(Method method) {
 		final Class<? extends Object> type = method.getReturnType();
-		return type.isPrimitive() //
-				|| type.isEnum() //
-				|| String.class.isAssignableFrom(type) //
-				|| Long.class.isAssignableFrom(type);
+		if (type.isPrimitive() || type.isEnum()) {
+			return true;
+		}
+		for (final Class<?> simpleType : SIMPLE_TYPES) {
+			if (simpleType.isAssignableFrom(type)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private String getPropertyName(String methodName) {
