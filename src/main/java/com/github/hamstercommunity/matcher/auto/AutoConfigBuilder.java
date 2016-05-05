@@ -21,9 +21,15 @@ import static java.util.Arrays.asList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Currency;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -36,8 +42,9 @@ class AutoConfigBuilder<T> {
 
 	private final static Logger LOG = Logger.getLogger(AutoConfigBuilder.class.getName());
 
-	private final static Set<Class<?>> SIMPLE_TYPES = Collections
-			.unmodifiableSet(new HashSet<>(asList(String.class, Long.class)));
+	private final static Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(
+			new HashSet<>(asList(String.class, Long.class, Integer.class, Boolean.class, Float.class, Double.class,
+					BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class, Currency.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
