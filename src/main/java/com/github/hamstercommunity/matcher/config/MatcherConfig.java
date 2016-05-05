@@ -20,7 +20,6 @@ package com.github.hamstercommunity.matcher.config;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -107,37 +106,6 @@ public class MatcherConfig<T> {
 				return (Matcher<P>) Matchers.nullValue();
 			}
 			return matcherBuilder.apply(expectedValue);
-		}
-
-		/**
-		 * Add a property of type array where the element order is relevant.
-		 *
-		 * @param propertyName
-		 *            name of the property.
-		 * @param propertyAccessor
-		 *            the accessor function for retrieving the property value.
-		 * @param matcherBuilder
-		 *            a function for creating the matcher for the list elements.
-		 * @return the builder itself for fluent programming style.
-		 */
-		public <P> Builder<B> addArrayProperty(final String propertyName, final Function<B, P[]> propertyAccessor,
-				final Function<P, Matcher<P>> matcherBuilder) {
-			final P[] expectedPropertyValue = propertyAccessor.apply(this.expected);
-			final Matcher<P[]> listMatcher = createArrayMatcher(matcherBuilder, expectedPropertyValue);
-			return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
-		}
-
-		private <P> Matcher<P[]> createArrayMatcher(Function<P, Matcher<P>> matcherBuilder, P[] expectedPropertyValue) {
-			if (expectedPropertyValue == null) {
-				return new NullArrayMatcher<P>();
-			}
-			if (expectedPropertyValue.length == 0) {
-				return Matchers.arrayWithSize(0);
-			}
-			final List<Matcher<? super P>> matchers = Arrays.stream(expectedPropertyValue) //
-					.map(matcherBuilder) //
-					.collect(toList());
-			return Matchers.arrayContaining(matchers);
 		}
 
 		/**
