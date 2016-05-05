@@ -21,7 +21,10 @@ import static java.util.Arrays.asList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -47,6 +50,7 @@ class AutoConfigBuilder<T> {
 				.filter(this::isNotBlackListed) //
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
+				.sorted(Comparator.comparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
 		return configBuilder.build();
 	}
@@ -73,15 +77,15 @@ class AutoConfigBuilder<T> {
 		final String propertyName = getPropertyName(method.getName());
 
 		if (isSimpleType(propertyType)) {
-			// LOG.info(() -> "Adding property '" + propertyName + "' with
-			// simple type " + propertyType.getName());
+			LOG.info(() -> "Adding property '" + propertyName + "' with simple type " + propertyType.getName());
 			configBuilder.addEqualsProperty(propertyName, createGetter(method));
 		} else if (isIterableType(propertyType)) {
-			LOG.info(() -> "Adding iterable property '" + propertyName + "' with member type "
-					+ method.getGenericReturnType().getTypeName());
-
-			// configBuilder.addIterableProperty(propertyName,
-			// createGetter(method), )
+			final Type iterableMemberType = ((ParameterizedType) method.getGenericReturnType())
+					.getActualTypeArguments()[0];
+			LOG.info(() -> {
+				return "Adding iterable property '" + propertyName + "' with member type " + iterableMemberType;
+			});
+			configBuilder.addIterableProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		} else {
 			LOG.info(() -> "Adding general property '" + propertyName + "' with type " + propertyType);
 			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
@@ -89,7 +93,8 @@ class AutoConfigBuilder<T> {
 	}
 
 	private boolean isIterableType(Class<?> propertyType) {
-		return Iterable.class.isAssignableFrom(propertyType);
+		return Iterable.class.isAssignableFrom(propertyType) //
+				&& propertyType.getTypeParameters().length == 1;
 	}
 
 	private <P> Function<T, P> createGetter(Method method) {
