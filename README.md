@@ -31,7 +31,7 @@ dependencies {
 ```
 
 ### Using `ConfigurableMatcher`
-Create a matcher for your model class by extending [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/ConfigurableMatcher.java), see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
+Create a matcher for your model class by extending [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/config/ConfigurableMatcher.java), see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
 
 This allows you to specify properties and custom property matchers.
 
