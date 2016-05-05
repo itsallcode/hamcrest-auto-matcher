@@ -26,7 +26,6 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.test.MatcherTestBase;
 
@@ -47,11 +46,11 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	private static final String ATTR3 = "attrValue3";
 
 	private static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1
-			+ "\", attr=null, children=null}";
+			+ "\", attr=null, stringArray=null, children=null}";
 	private static final String CHILD1 = "{id=<" + ID2 + ">, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
-			+ "\"}, children=an empty iterable}";
+			+ "\"}, stringArray=null, children=an empty iterable}";
 	private static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, name=\"" + NAME1 + "\", attr={value=\""
-			+ ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "]}";
+			+ ATTR1 + "\"}, stringArray=null, children=iterable containing [" + CHILD1 + "]}";
 
 	private DemoModel expectedSimpleModel;
 	private DemoModel expectedComplexModel;
@@ -133,7 +132,7 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	@Test
 	public void testMessageSimpleFilledChildList() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
-				"{children was <[DemoModel [id=" + ID2 + ", name=null, attr=null, children=null]]>}", //
+				"{children was <[DemoModel [id=" + ID2 + ", name=null, attr=null, children=null, stringArray=null]]>}", //
 				expectedSimpleModel, //
 				model(ID1, NAME1, null, asList(model(ID2, null, null, null))));
 	}
@@ -205,21 +204,66 @@ public class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	@Test
 	public void testMessageComplexAdditionalChild() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
-				"{children Not matched: <DemoModel [id=" + ID3 + ", name=" + NAME3 + ", attr=null, children=null]>}", //
+				"{children Not matched: <DemoModel [id=" + ID3 + ", name=" + NAME3
+						+ ", attr=null, children=null, stringArray=null]>}", //
 				expectedComplexModel, //
 				model(ID1, NAME1, attr(ATTR1), //
 						asList(model(ID2, NAME2, attr(ATTR2), emptyList()), //
 								model(ID3, NAME3, null, null))));
 	}
 
+	@Test
+	public void testMessageStringArrayEmpty() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{stringArray was []}", //
+				expectedSimpleModel, //
+				modelWithStringArray(new String[0]));
+	}
+
+	@Test
+	public void testMessageStringArraySize1NullContent() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{stringArray was [null]}", //
+				expectedSimpleModel, //
+				modelWithStringArray(new String[1]));
+	}
+
+	@Test
+	public void testMessageStringArraySize3NullContent() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{stringArray was [null, null, null]}", //
+				expectedSimpleModel, //
+				modelWithStringArray(new String[3]));
+	}
+
+	@Test
+	public void testMessageStringArraySize1ValueContent() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{stringArray was [\"val1\"]}", //
+				expectedSimpleModel, //
+				modelWithStringArray(new String[] { "val1" }));
+	}
+
+	@Test
+	public void testMessageStringArraySize3ValueContent() {
+		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
+				"{stringArray was [\"val1\", \"val2\", \"val3\"]}", //
+				expectedSimpleModel, //
+				modelWithStringArray(new String[] { "val1", "val2", "val3" }));
+	}
+
 	@Override
 	protected Matcher<? super DemoModel> createMatcher(DemoModel expected) {
-		// return DemoModelMatcher.equalTo(expected);
-		return AutoMatcher.equalTo(expected);
+		return DemoModelMatcher.equalTo(expected);
+		// return AutoMatcher.equalTo(expected);
+	}
+
+	private DemoModel modelWithStringArray(String[] array) {
+		return new DemoModel(ID1, NAME1, null, array, null);
 	}
 
 	private DemoModel model(int id, String name, DemoAttribute attribute, List<DemoModel> children) {
-		return new DemoModel(id, name, attribute, children);
+		return new DemoModel(id, name, attribute, null, children);
 	}
 
 	private DemoAttribute attr(String value) {

@@ -20,11 +20,11 @@ package com.github.hamstercommunity.matcher.config;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.hamcrest.BaseMatcher;
@@ -110,6 +110,37 @@ public class MatcherConfig<T> {
 		}
 
 		/**
+		 * Add a property of type array where the element order is relevant.
+		 *
+		 * @param propertyName
+		 *            name of the property.
+		 * @param propertyAccessor
+		 *            the accessor function for retrieving the property value.
+		 * @param matcherBuilder
+		 *            a function for creating the matcher for the list elements.
+		 * @return the builder itself for fluent programming style.
+		 */
+		public <P> Builder<B> addArrayProperty(final String propertyName, final Function<B, P[]> propertyAccessor,
+				final Function<P, Matcher<P>> matcherBuilder) {
+			final P[] expectedPropertyValue = propertyAccessor.apply(this.expected);
+			final Matcher<P[]> listMatcher = createArrayMatcher(matcherBuilder, expectedPropertyValue);
+			return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
+		}
+
+		private <P> Matcher<P[]> createArrayMatcher(Function<P, Matcher<P>> matcherBuilder, P[] expectedPropertyValue) {
+			if (expectedPropertyValue == null) {
+				return new NullArrayMatcher<P>();
+			}
+			if (expectedPropertyValue.length == 0) {
+				return Matchers.arrayWithSize(0);
+			}
+			final List<Matcher<? super P>> matchers = Arrays.stream(expectedPropertyValue) //
+					.map(matcherBuilder) //
+					.collect(toList());
+			return Matchers.arrayContaining(matchers);
+		}
+
+		/**
 		 * Add a property of type {@link Iterable} where the element order is
 		 * relevant.
 		 *
@@ -118,7 +149,8 @@ public class MatcherConfig<T> {
 		 * @param propertyAccessor
 		 *            the accessor function for retrieving the property value.
 		 * @param matcherBuilder
-		 *            a function for creating the matcher for the list elements.
+		 *            a function for creating the matcher for the iterable
+		 *            elements.
 		 * @return the builder itself for fluent programming style.
 		 */
 		public <P> Builder<B> addIterableProperty(final String propertyName,
@@ -138,7 +170,8 @@ public class MatcherConfig<T> {
 				return Matchers.<P> emptyIterable();
 			}
 			final List<Matcher<? super P>> matchers = StreamSupport.stream(expectedPropertyValue.spliterator(), false)
-					.map(matcherBuilder).collect(Collectors.toList());
+					.map(matcherBuilder) //
+					.collect(toList());
 			return Matchers.contains(matchers);
 		}
 
@@ -164,6 +197,18 @@ public class MatcherConfig<T> {
 	}
 
 	private static class NullIterableMatcher<T> extends BaseMatcher<Iterable<T>> {
+		@Override
+		public boolean matches(Object item) {
+			return item == null;
+		}
+
+		@Override
+		public void describeTo(Description description) {
+			description.appendText("null");
+		}
+	}
+
+	private static class NullArrayMatcher<T> extends BaseMatcher<T[]> {
 		@Override
 		public boolean matches(Object item) {
 			return item == null;

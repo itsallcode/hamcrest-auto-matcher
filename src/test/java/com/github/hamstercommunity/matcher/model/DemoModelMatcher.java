@@ -17,6 +17,8 @@
  */
 package com.github.hamstercommunity.matcher.model;
 
+import org.hamcrest.Matchers;
+
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 
@@ -31,6 +33,7 @@ public class DemoModelMatcher extends ConfigurableMatcher<DemoModel> {
 				.addEqualsProperty("id", DemoModel::getId) //
 				.addEqualsProperty("name", DemoModel::getName) //
 				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
+				.addArrayProperty("stringArray", DemoModel::getStringArray, Matchers::equalTo)
 				.addIterableProperty("children", DemoModel::getChildren, DemoModelMatcher::equalTo) //
 				.build());
 	}

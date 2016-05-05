@@ -17,6 +17,7 @@
  */
 package com.github.hamstercommunity.matcher.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
@@ -29,11 +30,13 @@ public class DemoModel {
 	private final String name;
 	private final DemoAttribute attr;
 	private final List<DemoModel> children;
+	private final String[] stringArray;
 
-	public DemoModel(int id, String name, DemoAttribute attr, List<DemoModel> children) {
+	public DemoModel(int id, String name, DemoAttribute attr, String[] stringArray, List<DemoModel> children) {
 		this.id = id;
 		this.name = name;
 		this.attr = attr;
+		this.stringArray = stringArray;
 		this.children = children;
 	}
 
@@ -53,8 +56,13 @@ public class DemoModel {
 		return children;
 	}
 
+	public String[] getStringArray() {
+		return stringArray;
+	}
+
 	@Override
 	public String toString() {
-		return "DemoModel [id=" + id + ", name=" + name + ", attr=" + attr + ", children=" + children + "]";
+		return "DemoModel [id=" + id + ", name=" + name + ", attr=" + attr + ", children=" + children + ", stringArray="
+				+ Arrays.toString(stringArray) + "]";
 	}
 }
