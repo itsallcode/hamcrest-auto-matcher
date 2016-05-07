@@ -86,17 +86,17 @@ class AutoConfigBuilder<T> {
 
 	private void addConfigForGetter(Method method) {
 		final String propertyName = getPropertyName(method.getName());
-		final Function<T, Iterable<? extends Object>> getter = createGetter(method);
 
 		if (hasSimpleReturnType(method)) {
 			LOG.finest(() -> "Adding property '" + propertyName + "' for getter " + method);
-			configBuilder.addEqualsProperty(propertyName, getter);
+			configBuilder.addEqualsProperty(propertyName, createGetter(method));
 		} else if (hasIterableReturnType(method)) {
 			LOG.finest(() -> "Adding iterable property '" + propertyName + "' for getter " + method);
+			final Function<T, Iterable<? extends Object>> getter = createGetter(method);
 			configBuilder.addIterableProperty(propertyName, getter, AutoMatcher::equalTo);
 		} else {
 			LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
-			configBuilder.addProperty(propertyName, getter, AutoMatcher::equalTo);
+			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 		}
 	}
 
