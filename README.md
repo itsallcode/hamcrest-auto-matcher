@@ -184,5 +184,6 @@ $ ./gradlew licenseFormatMain licenseFormatTest
     ```bash
     $ ./gradlew clean check bintrayUpload -i
     ```
-    
-4. Sign in at https://bintray.com/ and publish the uploaded artifacts.
+
+4. Create a new [release](https://github.com/hamstercommunity/hamcrest-auto-matcher/releases) on GitHub.
+5. Sign in at https://bintray.com/ and publish the uploaded artifacts.
