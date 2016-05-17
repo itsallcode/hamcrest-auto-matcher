@@ -19,10 +19,12 @@ package com.github.hamstercommunity.matcher.auto;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -42,9 +44,9 @@ class AutoConfigBuilder<T> {
 
 	private final static Logger LOG = Logger.getLogger(AutoConfigBuilder.class.getName());
 
-	private final static Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(
-			new HashSet<>(asList(String.class, Long.class, Integer.class, Boolean.class, Float.class, Double.class,
-					BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class, Currency.class)));
+	private final static Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(new HashSet<>(asList(String.class,
+			Long.class, Integer.class, Boolean.class, Float.class, Double.class, BigInteger.class, BigDecimal.class,
+			Calendar.class, Date.class, Temporal.class, Currency.class, File.class, Path.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
