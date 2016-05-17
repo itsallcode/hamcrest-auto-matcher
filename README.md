@@ -171,13 +171,18 @@ $ ./gradlew licenseFormatMain licenseFormatTest
 
 ### Publish to jcenter
 
-* Create file `gradle.properties` in project directory with the following content and enter your bintray account:
-```properties
-bintrayUser = <user>
-bintrayApiKey = <apiKey>
-```
-* Increment version number in `build.gradle`
-* Run the following command:
-```bash
-$ ./gradlew clean check bintrayUpload -i
-```
+1. Create file `gradle.properties` in project directory with the following content and enter your bintray account:
+
+    ```properties
+    bintrayUser = <user>
+    bintrayApiKey = <apiKey>
+    ```
+
+2. Increment version number in `build.gradle`
+3. Run the following command:
+
+    ```bash
+    $ ./gradlew clean check bintrayUpload -i
+    ```
+    
+4. Sign in at https://bintray.com/ and publish the uploaded artifacts.
