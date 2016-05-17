@@ -178,7 +178,7 @@ $ ./gradlew licenseFormatMain licenseFormatTest
     bintrayApiKey = <apiKey>
     ```
 
-2. Increment version number in `build.gradle`
+2. Increment version number in `build.gradle`, commit and push.
 3. Run the following command:
 
     ```bash
