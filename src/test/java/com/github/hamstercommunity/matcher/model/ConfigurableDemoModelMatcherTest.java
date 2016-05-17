@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 /**
  * Unit test for {@link DemoModelMatcher}
  */
-
 @RunWith(J8Unit4.class)
 public class ConfigurableDemoModelMatcherTest implements DemoModelMatcherTest {
 	@Override
