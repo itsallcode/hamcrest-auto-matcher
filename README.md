@@ -5,22 +5,32 @@
 
 Automatic hamcrest matcher for model classes
 
+## Why use hamcrest-auto-matcher
+
+Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnosingMatcher`](http://hamcrest.org/JavaHamcrest/javadoc/1.3/org/hamcrest/TypeSafeDiagnosingMatcher.html) is a good idea, because it gives you a readable diff of actual and expected property values. But doing it by hand is tedious and hard to get right, especially for classes with many properties:
+* It is easy to make mistakes in the `matches()` method.
+* It requires lot's of boiler plate code.
+* Good layout of actual and expected property values is hard to get right.
+* Each property occurs in multiple places which violates the [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) principle.
+
+
+
 ## Usage
 
 ### Setup dependencies
 
-* Add jcenter maven repository:
+#### Gradle
 ```groovy
 repositories {
     jcenter()
 }
-```
-* Add dependency
-```groovy
+
 dependencies {
     testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.2.0'
 }
 ```
+
+#### Maven
 ```xml
 <dependency>
 	<groupId>com.github.kaklakariada</groupId>
