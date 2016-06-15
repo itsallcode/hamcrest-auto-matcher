@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.3.0'
+    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.3.1'
 }
 ```
 
@@ -182,7 +182,7 @@ $ ./gradlew licenseFormatMain licenseFormatTest
 3. Run the following command:
 
     ```bash
-    $ ./gradlew clean check bintrayUpload -i
+    $ ./gradlew clean build check bintrayUpload -i
     ```
 
 4. Create a new [release](https://github.com/hamstercommunity/hamcrest-auto-matcher/releases) on GitHub.
