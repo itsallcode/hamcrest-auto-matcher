@@ -34,6 +34,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -46,7 +47,7 @@ class AutoConfigBuilder<T> {
 
 	private final static Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(new HashSet<>(asList(String.class,
 			Long.class, Integer.class, Boolean.class, Float.class, Double.class, BigInteger.class, BigDecimal.class,
-			Calendar.class, Date.class, Temporal.class, Currency.class, File.class, Path.class)));
+			Calendar.class, Date.class, Temporal.class, Currency.class, File.class, Path.class, UUID.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
