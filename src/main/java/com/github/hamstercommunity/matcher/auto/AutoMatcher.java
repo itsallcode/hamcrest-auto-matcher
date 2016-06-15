@@ -17,7 +17,13 @@
  */
 package com.github.hamstercommunity.matcher.auto;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
@@ -31,5 +37,15 @@ public class AutoMatcher {
 	public static <T> Matcher<T> equalTo(T expected) {
 		final MatcherConfig<T> config = new AutoConfigBuilder<T>(expected).build();
 		return new ConfigurableMatcher<>(config);
+	}
+
+	@SafeVarargs
+	public static <T> Matcher<Iterable<? extends T>> contains(T... expected) {
+		final List<Matcher<T>> itemMatchers = Arrays.stream(expected) //
+				.map(AutoMatcher::equalTo) //
+				.collect(toList());
+		@SuppressWarnings("unchecked")
+		final Matcher<Iterable<? extends T>> listMatcher = Matchers.contains(itemMatchers.toArray(new Matcher[0]));
+		return listMatcher;
 	}
 }
