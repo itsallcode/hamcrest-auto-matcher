@@ -18,6 +18,7 @@
 package com.github.hamstercommunity.matcher.auto;
 
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.Matchers.emptyIterable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,17 +36,36 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig;
 public class AutoMatcher {
 
 	public static <T> Matcher<T> equalTo(T expected) {
-		final MatcherConfig<T> config = new AutoConfigBuilder<T>(expected).build();
+		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
 	}
 
 	@SafeVarargs
 	public static <T> Matcher<Iterable<? extends T>> contains(T... expected) {
-		final List<Matcher<T>> itemMatchers = Arrays.stream(expected) //
-				.map(AutoMatcher::equalTo) //
-				.collect(toList());
+		if (expected.length == 0) {
+			return emptyIterable();
+		}
+		final List<Matcher<T>> itemMatchers = getMatchers(expected);
 		@SuppressWarnings("unchecked")
 		final Matcher<Iterable<? extends T>> listMatcher = Matchers.contains(itemMatchers.toArray(new Matcher[0]));
 		return listMatcher;
+	}
+
+	@SafeVarargs
+	public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(T... expected) {
+		if (expected.length == 0) {
+			return emptyIterable();
+		}
+		final List<Matcher<T>> itemMatchers = getMatchers(expected);
+		@SuppressWarnings("unchecked")
+		final Matcher<Iterable<? extends T>> listMatcher = Matchers
+				.containsInAnyOrder(itemMatchers.toArray(new Matcher[0]));
+		return listMatcher;
+	}
+
+	private static <T> List<Matcher<T>> getMatchers(T[] expected) {
+		return Arrays.stream(expected) //
+				.map(AutoMatcher::equalTo) //
+				.collect(toList());
 	}
 }

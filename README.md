@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.3.1'
+    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.3.2'
 }
 ```
 
