@@ -35,6 +35,10 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig;
  */
 public class AutoMatcher {
 
+	private AutoMatcher() {
+		// not instantiable
+	}
+
 	public static <T> Matcher<T> equalTo(T expected) {
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
@@ -45,10 +49,7 @@ public class AutoMatcher {
 		if (expected.length == 0) {
 			return emptyIterable();
 		}
-		final List<Matcher<T>> itemMatchers = getMatchers(expected);
-		@SuppressWarnings("unchecked")
-		final Matcher<Iterable<? extends T>> listMatcher = Matchers.contains(itemMatchers.toArray(new Matcher[0]));
-		return listMatcher;
+		return Matchers.contains(getMatchers(expected));
 	}
 
 	@SafeVarargs
@@ -56,14 +57,10 @@ public class AutoMatcher {
 		if (expected.length == 0) {
 			return emptyIterable();
 		}
-		final List<Matcher<T>> itemMatchers = getMatchers(expected);
-		@SuppressWarnings("unchecked")
-		final Matcher<Iterable<? extends T>> listMatcher = Matchers
-				.containsInAnyOrder(itemMatchers.toArray(new Matcher[0]));
-		return listMatcher;
+		return Matchers.containsInAnyOrder(getMatchers(expected));
 	}
 
-	private static <T> List<Matcher<T>> getMatchers(T[] expected) {
+	private static <T> List<Matcher<? super T>> getMatchers(T[] expected) {
 		return Arrays.stream(expected) //
 				.map(AutoMatcher::equalTo) //
 				.collect(toList());
