@@ -37,7 +37,7 @@ dependencies {
 <dependency>
     <groupId>com.github.kaklakariada</groupId>
     <artifactId>hamcrest-auto-matcher</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.2</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -96,9 +96,6 @@ public class DemoModel {
     }
 }
 
-```
-
-```java
 public class DemoAttribute {
     private final String value;
 
