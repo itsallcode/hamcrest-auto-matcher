@@ -160,10 +160,10 @@ $ ./gradlew check
 
 Import into eclipse using [buildship](https://projects.eclipse.org/projects/tools.buildship).
 
-### Generate license header for added files:
+### Generate license header for added files
 
 ```bash
-$ ./gradlew licenseFormatMain licenseFormatTest
+$ ./gradlew licenseFormat
 ```
 
 ### Publish to jcenter
