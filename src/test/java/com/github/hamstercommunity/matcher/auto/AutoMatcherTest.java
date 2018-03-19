@@ -22,7 +22,15 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.Instant;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -143,6 +151,90 @@ public class AutoMatcherTest {
 	@Test
 	public void testContainsInAnyOrderActualMultipleEntriesExpectMoreEntries() {
 		assertThat(asList(value1, value2), not(AutoMatcher.containsInAnyOrder(value1Equal, value2Equal, value1Equal)));
+	}
+
+	@Test
+	public void testStringListContains() {
+		assertThat(asList("val"), not(AutoMatcher.contains("wrong")));
+		assertThat(asList("val"), AutoMatcher.contains("val"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeString() {
+		assertAutoMatcherWorksForSimpleType("val", "wrong");
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeInteger() {
+		assertAutoMatcherWorksForSimpleType(1, 2);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeLong() {
+		assertAutoMatcherWorksForSimpleType(1L, 2L);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeBoolean() {
+		assertAutoMatcherWorksForSimpleType(true, false);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeFloat() {
+		assertAutoMatcherWorksForSimpleType(1.0F, 1.1F);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeDouble() {
+		assertAutoMatcherWorksForSimpleType(1.0D, 1.1D);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeBigInteger() {
+		assertAutoMatcherWorksForSimpleType(BigInteger.ZERO, BigInteger.ONE);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeBigDecimal() {
+		assertAutoMatcherWorksForSimpleType(BigDecimal.ZERO, BigDecimal.ONE);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeCalendar() {
+		final Calendar cal1 = Calendar.getInstance();
+		final Calendar cal2 = Calendar.getInstance();
+		cal2.add(Calendar.MILLISECOND, 1);
+		assertAutoMatcherWorksForSimpleType(cal1, cal2);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeDate() {
+		assertAutoMatcherWorksForSimpleType(new Date(1), new Date(2));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeInstance() {
+		assertAutoMatcherWorksForSimpleType(Instant.ofEpochMilli(1), Instant.ofEpochMilli(2));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeFile() {
+		assertAutoMatcherWorksForSimpleType(new File("a"), new File("b"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypePath() {
+		assertAutoMatcherWorksForSimpleType(Paths.get("a"), Paths.get("b"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeUuid() {
+		assertAutoMatcherWorksForSimpleType(UUID.randomUUID(), UUID.randomUUID());
+	}
+
+	private <T> void assertAutoMatcherWorksForSimpleType(T value1, T value2) {
+		assertThat(value1, not(AutoMatcher.equalTo(value2)));
+		assertThat(value1, AutoMatcher.equalTo(value1));
 	}
 
 	private DemoModel model(String name, int id) {

@@ -38,6 +38,10 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 import com.github.hamstercommunity.matcher.config.MatcherConfig.Builder;
 
@@ -52,12 +56,12 @@ class AutoConfigBuilder<T> {
 	private final T expected;
 	private final Builder<T> configBuilder;
 
-	AutoConfigBuilder(T expected) {
+	private AutoConfigBuilder(T expected) {
 		this.expected = expected;
 		this.configBuilder = MatcherConfig.builder(expected);
 	}
 
-	MatcherConfig<T> build() {
+	private MatcherConfig<T> build() {
 		Arrays.stream(expected.getClass().getMethods()) //
 				.filter(this::isNotBlackListed) //
 				.filter(this::isGetterMethodName) //
@@ -68,6 +72,14 @@ class AutoConfigBuilder<T> {
 						.thenComparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
 		return configBuilder.build();
+	}
+
+	public static <T> Matcher<T> createEqualToMatcher(T expected) {
+		if (isSimpleType(expected.getClass())) {
+			return Matchers.equalTo(expected);
+		}
+		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
+		return new ConfigurableMatcher<>(config);
 	}
 
 	private boolean isNotBlackListed(Method method) {
@@ -122,6 +134,10 @@ class AutoConfigBuilder<T> {
 		if (type.isPrimitive() || type.isEnum()) {
 			return true;
 		}
+		return isSimpleType(type);
+	}
+
+	private static boolean isSimpleType(final Class<? extends Object> type) {
 		for (final Class<?> simpleType : SIMPLE_TYPES) {
 			if (simpleType.isAssignableFrom(type)) {
 				return true;
