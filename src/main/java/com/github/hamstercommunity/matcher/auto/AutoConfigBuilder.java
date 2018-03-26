@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.StreamSupport;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -67,7 +68,6 @@ class AutoConfigBuilder<T> {
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
 				.sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
-						.thenComparing(this::hasIterableReturnType) //
 						.thenComparing(this::hasArrayReturnType) //
 						.thenComparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
@@ -77,6 +77,16 @@ class AutoConfigBuilder<T> {
 	public static <T> Matcher<T> createEqualToMatcher(T expected) {
 		if (isSimpleType(expected.getClass())) {
 			return Matchers.equalTo(expected);
+		}
+		if (Iterable.class.isAssignableFrom(expected.getClass())) {
+			@SuppressWarnings("unchecked")
+			final Iterable<T> expectedIterable = (Iterable<T>) expected;
+			final Object[] elements = StreamSupport.stream(expectedIterable //
+					.spliterator(), false) //
+					.toArray();
+			@SuppressWarnings("unchecked")
+			final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
+			return matcher;
 		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
@@ -101,28 +111,12 @@ class AutoConfigBuilder<T> {
 
 	private void addConfigForGetter(Method method) {
 		final String propertyName = getPropertyName(method.getName());
-
-		if (hasSimpleReturnType(method)) {
-			LOG.finest(() -> "Adding property '" + propertyName + "' for getter " + method);
-			configBuilder.addEqualsProperty(propertyName, createGetter(method));
-		} else if (hasIterableReturnType(method)) {
-			LOG.finest(() -> "Adding iterable property '" + propertyName + "' for getter " + method);
-			final Function<T, Iterable<? extends Object>> getter = createGetter(method);
-			configBuilder.addIterableProperty(propertyName, getter, AutoMatcher::equalTo);
-		} else {
-			LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
-			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
-		}
+		LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
+		configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 	}
 
 	private boolean hasArrayReturnType(Method method) {
 		return method.getReturnType().isArray();
-	}
-
-	private boolean hasIterableReturnType(Method method) {
-		final Class<?> propertyType = method.getReturnType();
-		return Iterable.class.isAssignableFrom(propertyType) //
-				&& propertyType.getTypeParameters().length == 1;
 	}
 
 	private <P> Function<T, P> createGetter(Method method) {
