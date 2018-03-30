@@ -22,24 +22,31 @@ import static java.util.Arrays.asList;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.StreamSupport;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsMapContaining;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
@@ -67,7 +74,6 @@ class AutoConfigBuilder<T> {
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
 				.sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
-						.thenComparing(this::hasIterableReturnType) //
 						.thenComparing(this::hasArrayReturnType) //
 						.thenComparing(Method::getName)) //
 				.forEach(this::addConfigForGetter);
@@ -78,8 +84,47 @@ class AutoConfigBuilder<T> {
 		if (isSimpleType(expected.getClass())) {
 			return Matchers.equalTo(expected);
 		}
+		if (Map.class.isAssignableFrom(expected.getClass())) {
+			return createMapContainsMatcher(expected);
+		}
+		if (Iterable.class.isAssignableFrom(expected.getClass())) {
+			return createIterableContainsMatcher(expected);
+		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T, K, V> Matcher<T> createMapContainsMatcher(T expected) {
+		final Map<K, V> expectedMap = (Map<K, V>) expected;
+
+		final Collection<Matcher<? super T>> matchers = new ArrayList<>();
+
+		matchers.add(mapSizeMatcher(expectedMap));
+
+		for (final Entry<K, V> expectedEntry : expectedMap.entrySet()) {
+			matchers.add((Matcher<? super T>) IsMapContaining.hasEntry(createEqualToMatcher(expectedEntry.getKey()),
+					createEqualToMatcher(expectedEntry.getValue())));
+		}
+		return Matchers.allOf(matchers);
+	}
+
+	private static <T, K, V> ConfigurableMatcher<T> mapSizeMatcher(final Map<K, V> expectedMap) {
+		@SuppressWarnings("unchecked")
+		final MatcherConfig<T> config = (MatcherConfig<T>) MatcherConfig.builder(expectedMap)
+				.addEqualsProperty("size", map -> map.size()).build();
+		return new ConfigurableMatcher<>(config);
+	}
+
+	private static <T> Matcher<T> createIterableContainsMatcher(T expected) {
+		@SuppressWarnings("unchecked")
+		final Iterable<T> expectedIterable = (Iterable<T>) expected;
+		final Object[] elements = StreamSupport.stream(expectedIterable //
+				.spliterator(), false) //
+				.toArray();
+		@SuppressWarnings("unchecked")
+		final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
+		return matcher;
 	}
 
 	private boolean isNotBlackListed(Method method) {
@@ -101,28 +146,12 @@ class AutoConfigBuilder<T> {
 
 	private void addConfigForGetter(Method method) {
 		final String propertyName = getPropertyName(method.getName());
-
-		if (hasSimpleReturnType(method)) {
-			LOG.finest(() -> "Adding property '" + propertyName + "' for getter " + method);
-			configBuilder.addEqualsProperty(propertyName, createGetter(method));
-		} else if (hasIterableReturnType(method)) {
-			LOG.finest(() -> "Adding iterable property '" + propertyName + "' for getter " + method);
-			final Function<T, Iterable<? extends Object>> getter = createGetter(method);
-			configBuilder.addIterableProperty(propertyName, getter, AutoMatcher::equalTo);
-		} else {
-			LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
-			configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
-		}
+		LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
+		configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 	}
 
 	private boolean hasArrayReturnType(Method method) {
 		return method.getReturnType().isArray();
-	}
-
-	private boolean hasIterableReturnType(Method method) {
-		final Class<?> propertyType = method.getReturnType();
-		return Iterable.class.isAssignableFrom(propertyType) //
-				&& propertyType.getTypeParameters().length == 1;
 	}
 
 	private <P> Function<T, P> createGetter(Method method) {
@@ -161,10 +190,19 @@ class AutoConfigBuilder<T> {
 
 	@SuppressWarnings("unchecked")
 	private static <T, P> P getPropertyValue(Method method, T object) {
+		final Class<?> declaringClass = method.getDeclaringClass();
+		if (!declaringClass.isInstance(object)) {
+			throw new AssertionError("Expected object of type " + declaringClass.getName() + " but got "
+					+ object.getClass().getName() + ": " + object.toString());
+		}
+		if (!Modifier.isPublic(declaringClass.getModifiers())) {
+			method.setAccessible(true);
+		}
 		try {
 			return (P) method.invoke(object);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new RuntimeException("Error invoking method " + method + " on object " + object, e);
+			throw new RuntimeException("Error invoking method " + method + " on object " + object + " of type "
+					+ object.getClass().getName(), e);
 		}
 	}
 }

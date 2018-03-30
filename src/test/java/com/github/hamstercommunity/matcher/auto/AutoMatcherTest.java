@@ -17,6 +17,7 @@
  */
 package com.github.hamstercommunity.matcher.auto;
 
+import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.not;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.github.hamstercommunity.matcher.model.DemoAttribute;
 import com.github.hamstercommunity.matcher.model.DemoModel;
@@ -45,12 +48,36 @@ public class AutoMatcherTest {
 	private DemoModel value1Equal;
 	private DemoModel value2Equal;
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Before
 	public void setup() {
 		value1 = model("m", 1);
 		value2 = model("m", 2);
 		value1Equal = model("m", 1);
 		value2Equal = model("m", 2);
+	}
+
+	@Test
+	public void testIncompatibleTypes() {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage(
+				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1");
+
+		assertThat(1, AutoMatcher.equalTo(value1));
+	}
+
+	@Test
+	public void testIncompatibleListMemberTypes() {
+		final Object actual = asList(1);
+		final Object expected = asList(new DemoAttribute("attr"));
+
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Expected object of type " + DemoAttribute.class.getName() + " but got "
+				+ Integer.class.getName() + ": 1");
+
+		assertThat(actual, AutoMatcher.equalTo(expected));
 	}
 
 	@Test
@@ -161,42 +188,42 @@ public class AutoMatcherTest {
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeString() {
-		assertAutoMatcherWorksForSimpleType("val", "wrong");
+		assertValuesDoNotMatch("val", "wrong");
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeInteger() {
-		assertAutoMatcherWorksForSimpleType(1, 2);
+		assertValuesDoNotMatch(1, 2);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeLong() {
-		assertAutoMatcherWorksForSimpleType(1L, 2L);
+		assertValuesDoNotMatch(1L, 2L);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeBoolean() {
-		assertAutoMatcherWorksForSimpleType(true, false);
+		assertValuesDoNotMatch(true, false);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeFloat() {
-		assertAutoMatcherWorksForSimpleType(1.0F, 1.1F);
+		assertValuesDoNotMatch(1.0F, 1.1F);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeDouble() {
-		assertAutoMatcherWorksForSimpleType(1.0D, 1.1D);
+		assertValuesDoNotMatch(1.0D, 1.1D);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeBigInteger() {
-		assertAutoMatcherWorksForSimpleType(BigInteger.ZERO, BigInteger.ONE);
+		assertValuesDoNotMatch(BigInteger.ZERO, BigInteger.ONE);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeBigDecimal() {
-		assertAutoMatcherWorksForSimpleType(BigDecimal.ZERO, BigDecimal.ONE);
+		assertValuesDoNotMatch(BigDecimal.ZERO, BigDecimal.ONE);
 	}
 
 	@Test
@@ -204,37 +231,32 @@ public class AutoMatcherTest {
 		final Calendar cal1 = Calendar.getInstance();
 		final Calendar cal2 = Calendar.getInstance();
 		cal2.add(Calendar.MILLISECOND, 1);
-		assertAutoMatcherWorksForSimpleType(cal1, cal2);
+		assertValuesDoNotMatch(cal1, cal2);
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeDate() {
-		assertAutoMatcherWorksForSimpleType(new Date(1), new Date(2));
+		assertValuesDoNotMatch(new Date(1), new Date(2));
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeInstance() {
-		assertAutoMatcherWorksForSimpleType(Instant.ofEpochMilli(1), Instant.ofEpochMilli(2));
+		assertValuesDoNotMatch(Instant.ofEpochMilli(1), Instant.ofEpochMilli(2));
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeFile() {
-		assertAutoMatcherWorksForSimpleType(new File("a"), new File("b"));
+		assertValuesDoNotMatch(new File("a"), new File("b"));
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypePath() {
-		assertAutoMatcherWorksForSimpleType(Paths.get("a"), Paths.get("b"));
+		assertValuesDoNotMatch(Paths.get("a"), Paths.get("b"));
 	}
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeUuid() {
-		assertAutoMatcherWorksForSimpleType(UUID.randomUUID(), UUID.randomUUID());
-	}
-
-	private <T> void assertAutoMatcherWorksForSimpleType(T value1, T value2) {
-		assertThat(value1, not(AutoMatcher.equalTo(value2)));
-		assertThat(value1, AutoMatcher.equalTo(value1));
+		assertValuesDoNotMatch(UUID.randomUUID(), UUID.randomUUID());
 	}
 
 	private DemoModel model(String name, int id) {

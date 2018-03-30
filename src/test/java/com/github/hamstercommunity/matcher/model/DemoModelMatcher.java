@@ -34,9 +34,8 @@ public class DemoModelMatcher {
 				.addEqualsProperty("longVal", DemoModel::getLongVal) //
 				.addEqualsProperty("name", DemoModel::getName) //
 				.addProperty("attr", DemoModel::getAttr, DemoAttributeMatcher::equalTo) //
-				.addEqualsProperty("stringArray", DemoModel::getStringArray)
 				.addIterableProperty("children", DemoModel::getChildren, DemoModelMatcher::equalTo) //
-				.build();
+				.addEqualsProperty("stringArray", DemoModel::getStringArray).build();
 		return new ConfigurableMatcher<>(config);
 	}
 }
