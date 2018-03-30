@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.3.2'
+    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.4.0'
 }
 ```
 
@@ -37,7 +37,7 @@ dependencies {
 <dependency>
     <groupId>com.github.kaklakariada</groupId>
     <artifactId>hamcrest-auto-matcher</artifactId>
-    <version>0.3.2</version>
+    <version>0.4.0</version>
     <scope>test</scope>
 </dependency>
 ```
