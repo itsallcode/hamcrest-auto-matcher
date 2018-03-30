@@ -51,7 +51,6 @@ import org.hamcrest.collection.IsMapContaining;
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 import com.github.hamstercommunity.matcher.config.MatcherConfig.Builder;
-import com.github.hamstercommunity.matcher.map.IsMapWithSize;
 
 class AutoConfigBuilder<T> {
 
@@ -100,12 +99,21 @@ class AutoConfigBuilder<T> {
 		final Map<K, V> expectedMap = (Map<K, V>) expected;
 
 		final Collection<Matcher<? super T>> matchers = new ArrayList<>();
-		matchers.add((Matcher<? super T>) IsMapWithSize.isMapWithSize(expectedMap.size()));
+
+		matchers.add(mapSizeMatcher(expectedMap));
+
 		for (final Entry<K, V> expectedEntry : expectedMap.entrySet()) {
 			matchers.add((Matcher<? super T>) IsMapContaining.hasEntry(createEqualToMatcher(expectedEntry.getKey()),
 					createEqualToMatcher(expectedEntry.getValue())));
 		}
 		return Matchers.allOf(matchers);
+	}
+
+	private static <T, K, V> ConfigurableMatcher<T> mapSizeMatcher(final Map<K, V> expectedMap) {
+		@SuppressWarnings("unchecked")
+		final MatcherConfig<T> config = (MatcherConfig<T>) MatcherConfig.builder(expectedMap)
+				.addEqualsProperty("size", map -> map.size()).build();
+		return new ConfigurableMatcher<>(config);
 	}
 
 	private static <T> Matcher<T> createIterableContainsMatcher(T expected) {

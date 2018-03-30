@@ -22,6 +22,7 @@ import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesMatc
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static org.junit.Assert.assertThat;
 
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -60,9 +61,9 @@ public class AutoMatcherMapTest {
 		assertValuesDoNotMatch(singletonMap("key1", "value1"), new HashMap<>());
 	}
 
-	@Test
+	@Test(expected = ClassCastException.class)
 	public void testIncompatibleTypesClassNotPublic() {
-		assertValuesDoNotMatch(singletonList("value1"), singletonMap("key", "value"));
+		assertThat(singletonList("value1"), AutoMatcher.equalTo(singletonMap("key", "value")));
 	}
 
 	@Test
