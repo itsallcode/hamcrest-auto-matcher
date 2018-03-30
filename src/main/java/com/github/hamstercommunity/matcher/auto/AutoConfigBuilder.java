@@ -27,13 +27,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -42,10 +46,12 @@ import java.util.stream.StreamSupport;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsMapContaining;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;
 import com.github.hamstercommunity.matcher.config.MatcherConfig.Builder;
+import com.github.hamstercommunity.matcher.map.IsMapWithSize;
 
 class AutoConfigBuilder<T> {
 
@@ -79,18 +85,38 @@ class AutoConfigBuilder<T> {
 		if (isSimpleType(expected.getClass())) {
 			return Matchers.equalTo(expected);
 		}
+		if (Map.class.isAssignableFrom(expected.getClass())) {
+			return createMapContainsMatcher(expected);
+		}
 		if (Iterable.class.isAssignableFrom(expected.getClass())) {
-			@SuppressWarnings("unchecked")
-			final Iterable<T> expectedIterable = (Iterable<T>) expected;
-			final Object[] elements = StreamSupport.stream(expectedIterable //
-					.spliterator(), false) //
-					.toArray();
-			@SuppressWarnings("unchecked")
-			final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
-			return matcher;
+			return createIterableContainsMatcher(expected);
 		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T, K, V> Matcher<T> createMapContainsMatcher(T expected) {
+		final Map<K, V> expectedMap = (Map<K, V>) expected;
+
+		final Collection<Matcher<? super T>> matchers = new ArrayList<>();
+		matchers.add((Matcher<? super T>) IsMapWithSize.isMapWithSize(expectedMap.size()));
+		for (final Entry<K, V> expectedEntry : expectedMap.entrySet()) {
+			matchers.add((Matcher<? super T>) IsMapContaining.hasEntry(createEqualToMatcher(expectedEntry.getKey()),
+					createEqualToMatcher(expectedEntry.getValue())));
+		}
+		return Matchers.allOf(matchers);
+	}
+
+	private static <T> Matcher<T> createIterableContainsMatcher(T expected) {
+		@SuppressWarnings("unchecked")
+		final Iterable<T> expectedIterable = (Iterable<T>) expected;
+		final Object[] elements = StreamSupport.stream(expectedIterable //
+				.spliterator(), false) //
+				.toArray();
+		@SuppressWarnings("unchecked")
+		final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
+		return matcher;
 	}
 
 	private boolean isNotBlackListed(Method method) {

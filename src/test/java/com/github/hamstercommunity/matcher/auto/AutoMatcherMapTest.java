@@ -20,6 +20,7 @@ package com.github.hamstercommunity.matcher.auto;
 import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesMatch;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 
 import java.util.HashMap;
@@ -57,6 +58,11 @@ public class AutoMatcherMapTest {
 	@Test
 	public void testSingletonMapAndNewHashMap() {
 		assertValuesDoNotMatch(singletonMap("key1", "value1"), new HashMap<>());
+	}
+
+	@Test
+	public void testIncompatibleTypesClassNotPublic() {
+		assertValuesDoNotMatch(singletonList("value1"), singletonMap("key", "value"));
 	}
 
 	@Test
