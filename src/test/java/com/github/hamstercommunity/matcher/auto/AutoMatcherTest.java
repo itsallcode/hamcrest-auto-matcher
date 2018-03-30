@@ -20,6 +20,8 @@ package com.github.hamstercommunity.matcher.auto;
 import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
@@ -31,6 +33,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -66,6 +69,18 @@ public class AutoMatcherTest {
 				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1");
 
 		assertThat(1, AutoMatcher.equalTo(value1));
+	}
+
+	@Test
+	public void testIncompatibleTypesClassNotPublic() {
+		final List<String> actual = singletonList("value1");
+		final Map<Object, Object> expected = emptyMap();
+
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Expected object of type " + expected.getClass().getName() + " but got "
+				+ actual.getClass().getName() + ": " + actual.toString());
+
+		assertThat(actual, AutoMatcher.equalTo(expected));
 	}
 
 	@Test

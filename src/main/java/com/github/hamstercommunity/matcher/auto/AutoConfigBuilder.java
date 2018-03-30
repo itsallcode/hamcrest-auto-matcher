@@ -22,6 +22,7 @@ import static java.util.Arrays.asList;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -155,14 +156,19 @@ class AutoConfigBuilder<T> {
 
 	@SuppressWarnings("unchecked")
 	private static <T, P> P getPropertyValue(Method method, T object) {
-		if (!method.getDeclaringClass().isInstance(object)) {
-			throw new AssertionError("Expected object of type " + method.getDeclaringClass().getName() + " but got "
+		final Class<?> declaringClass = method.getDeclaringClass();
+		if (!declaringClass.isInstance(object)) {
+			throw new AssertionError("Expected object of type " + declaringClass.getName() + " but got "
 					+ object.getClass().getName() + ": " + object.toString());
+		}
+		if (!Modifier.isPublic(declaringClass.getModifiers())) {
+			method.setAccessible(true);
 		}
 		try {
 			return (P) method.invoke(object);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new RuntimeException("Error invoking method " + method + " on object " + object, e);
+			throw new RuntimeException("Error invoking method " + method + " on object " + object + " of type "
+					+ object.getClass().getName(), e);
 		}
 	}
 }

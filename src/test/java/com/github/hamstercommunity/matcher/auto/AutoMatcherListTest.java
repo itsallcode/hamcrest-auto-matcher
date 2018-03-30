@@ -21,11 +21,9 @@ import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesDoNo
 import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesMatch;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.junit.Test;
@@ -48,18 +46,13 @@ public class AutoMatcherListTest {
 	}
 
 	@Test
+	public void testEmptyListAndAsListAreEqaul() {
+		assertValuesMatch(emptyList(), asList());
+	}
+
+	@Test
 	public void testSingletonList() {
 		assertValuesDoNotMatch(singletonList("value1"), singletonList("value2"));
-	}
-
-	@Test
-	public void testSingletonMapAndEmptyMap() {
-		assertValuesDoNotMatch(singletonList("value1"), emptyMap());
-	}
-
-	@Test
-	public void testSingletonMapAndNewHashMap() {
-		assertValuesDoNotMatch(singletonList("value1"), new HashMap<>());
 	}
 
 	@Test
