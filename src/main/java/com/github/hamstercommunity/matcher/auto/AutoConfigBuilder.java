@@ -155,6 +155,10 @@ class AutoConfigBuilder<T> {
 
 	@SuppressWarnings("unchecked")
 	private static <T, P> P getPropertyValue(Method method, T object) {
+		if (!method.getDeclaringClass().isInstance(object)) {
+			throw new AssertionError("Expected object of type " + method.getDeclaringClass().getName() + " but got "
+					+ object.getClass().getName() + ": " + object.toString());
+		}
 		try {
 			return (P) method.invoke(object);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

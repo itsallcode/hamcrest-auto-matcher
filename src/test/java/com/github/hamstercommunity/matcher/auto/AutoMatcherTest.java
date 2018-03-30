@@ -34,7 +34,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.github.hamstercommunity.matcher.model.DemoAttribute;
 import com.github.hamstercommunity.matcher.model.DemoModel;
@@ -46,12 +48,24 @@ public class AutoMatcherTest {
 	private DemoModel value1Equal;
 	private DemoModel value2Equal;
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Before
 	public void setup() {
 		value1 = model("m", 1);
 		value2 = model("m", 2);
 		value1Equal = model("m", 1);
 		value2Equal = model("m", 2);
+	}
+
+	@Test
+	public void testIncompatibleTypes() {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage(
+				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1");
+
+		assertThat(1, AutoMatcher.equalTo(value1));
 	}
 
 	@Test
