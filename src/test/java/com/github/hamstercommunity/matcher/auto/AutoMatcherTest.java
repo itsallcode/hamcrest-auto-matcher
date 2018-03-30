@@ -72,6 +72,18 @@ public class AutoMatcherTest {
 	}
 
 	@Test
+	public void testIncompatibleListMemberTypes() {
+		final Object actual = asList(1);
+		final Object expected = asList(new DemoAttribute("attr"));
+
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Expected object of type " + DemoAttribute.class.getName() + " but got "
+				+ Integer.class.getName() + ": 1");
+
+		assertThat(actual, AutoMatcher.equalTo(expected));
+	}
+
+	@Test
 	public void testIncompatibleTypesClassNotPublic() {
 		final List<String> actual = singletonList("value1");
 		final Map<Object, Object> expected = emptyMap();

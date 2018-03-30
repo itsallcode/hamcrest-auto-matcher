@@ -28,11 +28,23 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import com.github.hamstercommunity.matcher.model.DemoAttribute;
+
 public class AutoMatcherListTest {
 
 	@Test
 	public void testEmptyList() {
 		assertValuesDoNotMatch(emptyList(), singletonList("value2"));
+	}
+
+	@Test
+	public void testIncompatibleMemberTypes() {
+		assertValuesDoNotMatch(asList("string"), asList(1));
+	}
+
+	@Test
+	public void testIncompatibleMemberTypesComplexTypes() {
+		assertValuesDoNotMatch(asList(new DemoAttribute("attr")), asList(1));
 	}
 
 	@Test
