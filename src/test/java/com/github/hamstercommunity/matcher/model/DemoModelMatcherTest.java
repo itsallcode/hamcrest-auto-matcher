@@ -45,11 +45,11 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	static final String ATTR3 = "attrValue3";
 
 	static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1
-			+ "\", attr=null, stringArray=null, children=null}";
+			+ "\", attr=null, children=null, stringArray=null}";
 	static final String CHILD1 = "{id=<" + ID2 + ">, longVal=null, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
-			+ "\"}, stringArray=null, children=an empty iterable}";
+			+ "\"}, children=an empty iterable, stringArray=null}";
 	static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1 + "\", attr={value=\""
-			+ ATTR1 + "\"}, stringArray=null, children=iterable containing [" + CHILD1 + "]}";
+			+ ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "], stringArray=null}";
 
 	@Test
 	default void testMatchAllNull() {
