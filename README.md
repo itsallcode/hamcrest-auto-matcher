@@ -151,7 +151,7 @@ Also see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/
 ## Development
 
 ```bash
-$ git clone https://github.com/hamstercommunity/hamcrest-auto-matcher.git
+$ git clone https://github.com/itsallcode/hamcrest-auto-matcher.git
 $ ./gradlew check
 # Test report: build/reports/tests/index.html
 ```
@@ -182,5 +182,5 @@ $ ./gradlew licenseFormat
     $ ./gradlew clean build check bintrayUpload -i
     ```
 
-4. Create a new [release](https://github.com/hamstercommunity/hamcrest-auto-matcher/releases) on GitHub.
+4. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
 5. Sign in at https://bintray.com/ and publish the uploaded artifacts.
