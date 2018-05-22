@@ -18,6 +18,8 @@
 package com.github.hamstercommunity.matcher.auto;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.Matchers.emptyArray;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +38,7 @@ import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -46,6 +49,7 @@ import java.util.stream.StreamSupport;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsArray;
 import org.hamcrest.collection.IsMapContaining;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
@@ -82,6 +86,9 @@ class AutoConfigBuilder<T> {
 	}
 
 	public static <T> Matcher<T> createEqualToMatcher(T expected) {
+		if (expected.getClass().isArray()) {
+			return createArrayMatcher(expected);
+		}
 		if (isSimpleType(expected.getClass())) {
 			return Matchers.equalTo(expected);
 		}
@@ -93,6 +100,25 @@ class AutoConfigBuilder<T> {
 		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> Matcher<T> createArrayMatcher(Object expected) {
+		final Class<T> componentType = (Class<T>) expected.getClass().getComponentType();
+		if (componentType.isPrimitive()) {
+			return (Matcher<T>) Matchers.equalTo(expected);
+		}
+		final Object[] expectedArray = (Object[]) expected;
+		if (expectedArray.length == 0) {
+			return (Matcher<T>) emptyArray();
+		}
+		if (isSimpleType(componentType)) {
+			final Matcher<Object[]> arrayContaining = Matchers.arrayContaining(expectedArray);
+			return (Matcher<T>) arrayContaining;
+		}
+		final List<Matcher<?>> matchers = Arrays.stream(expectedArray).map(AutoMatcher::equalTo).collect(toList());
+		final Matcher<Object[]> arrayContaining = IsArray.array(matchers.toArray(new Matcher[0]));
+		return (Matcher<T>) arrayContaining;
 	}
 
 	@SuppressWarnings("unchecked")
