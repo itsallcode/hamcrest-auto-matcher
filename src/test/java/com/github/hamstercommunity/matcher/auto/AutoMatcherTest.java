@@ -192,6 +192,11 @@ public class AutoMatcherTest {
 	}
 
 	@Test
+	public void testAutoMatcherWorksForSimpleTypeByte() {
+		assertValuesDoNotMatch((byte) 1, (byte) 2);
+	}
+
+	@Test
 	public void testAutoMatcherWorksForSimpleTypeInteger() {
 		assertValuesDoNotMatch(1, 2);
 	}
@@ -214,6 +219,16 @@ public class AutoMatcherTest {
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeDouble() {
 		assertValuesDoNotMatch(1.0D, 1.1D);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeShort() {
+		assertValuesDoNotMatch((short) 1, (short) 2);
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeChar() {
+		assertValuesDoNotMatch('a', 'b');
 	}
 
 	@Test

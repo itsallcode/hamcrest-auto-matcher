@@ -60,10 +60,10 @@ class AutoConfigBuilder<T> {
 
 	private final static Logger LOG = Logger.getLogger(AutoConfigBuilder.class.getName());
 
-	private final static Set<Class<?>> SIMPLE_TYPES = Collections
-			.unmodifiableSet(new HashSet<>(asList(String.class, Long.class, Integer.class, Boolean.class, Float.class,
-					Double.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class,
-					Currency.class, File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class)));
+	private final static Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(new HashSet<>(asList(String.class,
+			Long.class, Integer.class, Byte.class, Boolean.class, Float.class, Double.class, Character.class,
+			Short.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class, Currency.class,
+			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;

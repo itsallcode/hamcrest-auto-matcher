@@ -34,6 +34,27 @@ public class AutoMatcherArrayTest {
 	}
 
 	@Test
+	public void testClassWithArraysOnlyByteDiff() {
+		final TestClass value1 = new TestClass((byte) 0xAA, new byte[0], 0xDD, new int[0], "0x11", new String[0]);
+		final TestClass value2 = new TestClass((byte) 0xAB, new byte[0], 0xDD, new int[0], "0x11", new String[0]);
+		assertValuesDoNotMatch(value1, value2);
+	}
+
+	@Test
+	public void testClassWithArraysOnlyIntDiff() {
+		final TestClass value1 = new TestClass((byte) 0xAA, new byte[0], 0xDD, new int[0], "0x11", new String[0]);
+		final TestClass value2 = new TestClass((byte) 0xAA, new byte[0], 0xDF, new int[0], "0x11", new String[0]);
+		assertValuesDoNotMatch(value1, value2);
+	}
+
+	@Test
+	public void testClassWithArraysOnlyStringDiff() {
+		final TestClass value1 = new TestClass((byte) 0xAA, new byte[0], 0xDD, new int[0], "0x11", new String[0]);
+		final TestClass value2 = new TestClass((byte) 0xAA, new byte[0], 0xDD, new int[0], "0x12", new String[0]);
+		assertValuesDoNotMatch(value1, value2);
+	}
+
+	@Test
 	public void testPrimitiveByteArrays() {
 		assertValuesDoNotMatch(new byte[] { 1 }, new byte[] { 2 });
 	}
