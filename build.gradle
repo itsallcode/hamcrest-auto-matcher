@@ -1,19 +1,19 @@
 plugins {
-    id "com.github.hierynomus.license" version "0.14.0"
-    id "com.jfrog.bintray" version "1.8.0"
+    id "java-library"
+    id "maven-publish"
+    id "maven"
+    id "com.github.hierynomus.license" version "0.15.0"
+    id "com.jfrog.bintray" version "1.8.5"
 }
-
-apply plugin: 'java'
-apply plugin: 'maven-publish'
 
 repositories {
     jcenter()
 }
 
 dependencies {
-    compile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.j8unit:core:4.12.1'
+    implementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.j8unit:core:4.12.1'
 }
 
 group 'com.github.kaklakariada'
