@@ -20,8 +20,9 @@ package com.github.hamstercommunity.matcher.auto;
 import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -34,9 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import com.github.hamstercommunity.matcher.model.DemoAttribute;
 import com.github.hamstercommunity.matcher.model.DemoModel;
@@ -48,9 +47,6 @@ public class AutoMatcherTest {
 	private DemoModel value1Equal;
 	private DemoModel value2Equal;
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-
 	@Before
 	public void setup() {
 		value1 = model("m", 1);
@@ -61,11 +57,10 @@ public class AutoMatcherTest {
 
 	@Test
 	public void testIncompatibleTypes() {
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage(
-				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1");
-
-		assertThat(1, AutoMatcher.equalTo(value1));
+		assertThrows(
+				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1",
+				AssertionError.class,
+				() -> assertThat(1, AutoMatcher.equalTo(value1)));
 	}
 
 	@Test
@@ -73,11 +68,11 @@ public class AutoMatcherTest {
 		final Object actual = asList(1);
 		final Object expected = asList(new DemoAttribute("attr"));
 
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage("Expected object of type " + DemoAttribute.class.getName() + " but got "
-				+ Integer.class.getName() + ": 1");
-
-		assertThat(actual, AutoMatcher.equalTo(expected));
+		assertThrows(
+				"Expected object of type " + DemoAttribute.class.getName() + " but got "
+						+ Integer.class.getName() + ": 1",
+				AssertionError.class,
+				() -> assertThat(actual, AutoMatcher.equalTo(expected)));
 	}
 
 	@Test

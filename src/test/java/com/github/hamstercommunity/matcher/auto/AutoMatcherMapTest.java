@@ -22,7 +22,7 @@ import static com.github.hamstercommunity.matcher.auto.TestUtil.assertValuesMatc
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.HashMap;
 import java.util.TreeMap;

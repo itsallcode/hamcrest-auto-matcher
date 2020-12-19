@@ -17,8 +17,8 @@
  */
 package com.github.hamstercommunity.matcher.auto;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 public class TestUtil {
 	private TestUtil() {

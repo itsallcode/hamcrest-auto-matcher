@@ -17,11 +17,11 @@
  */
 package com.github.hamstercommunity.matcher.test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.function.Function;
@@ -35,8 +35,7 @@ import org.junit.Test;
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
  *
- * @param <T>
- *            the type compared by the {@link TypeSafeDiagnosingMatcher} under
+ * @param <T> the type compared by the {@link TypeSafeDiagnosingMatcher} under
  *            test.
  */
 public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> {
@@ -55,14 +54,10 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 	 * Verify that matching expected and actual fails with the correct error
 	 * message.
 	 * 
-	 * @param expectedDescription
-	 *            the description of the expected object
-	 * @param actualDescription
-	 *            the description of the actual object
-	 * @param expected
-	 *            the expected object being compared
-	 * @param actual
-	 *            the actual object being compared
+	 * @param expectedDescription the description of the expected object
+	 * @param actualDescription   the description of the actual object
+	 * @param expected            the expected object being compared
+	 * @param actual              the actual object being compared
 	 */
 	default void assertFailureDescription(String expectedDescription, String actualDescription, final T expected,
 			final T actual) {
@@ -84,8 +79,7 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 	/**
 	 * Create a matcher for the given expected object.
 	 * 
-	 * @param expected
-	 *            the expected object
+	 * @param expected the expected object
 	 * @return a matcher for the given expected object
 	 */
 	default Matcher<? super T> createMatcher(final T expected) {
