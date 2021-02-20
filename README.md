@@ -1,9 +1,6 @@
 # hamcrest-auto-matcher
 
-[![Build Status](https://travis-ci.org/itsallcode/hamcrest-auto-matcher.svg?branch=master)](https://travis-ci.org/itsallcode/hamcrest-auto-matcher)
-[![Download](https://api.bintray.com/packages/kaklakariada/maven/hamcrest-auto-matcher/images/download.svg)](https://bintray.com/kaklakariada/maven/hamcrest-auto-matcher/_latestVersion)
-
-Automatic hamcrest matcher for model classes for Java 8
+Automatic hamcrest matcher for model classes for Java 11
 
 ## Why use hamcrest-auto-matcher?
 
@@ -183,7 +180,7 @@ $ ./gradlew licenseFormat
 3. Run the following command:
 
     ```bash
-    $ ./gradlew clean check build publish -i
+    $ ./gradlew clean check build publish --info
     ```
 
 4. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
