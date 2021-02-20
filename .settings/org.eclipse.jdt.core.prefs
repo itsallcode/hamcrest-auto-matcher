@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.8
-org.eclipse.jdt.core.compiler.compliance=1.8
-org.eclipse.jdt.core.compiler.source=1.8
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=11
+org.eclipse.jdt.core.compiler.compliance=11
+org.eclipse.jdt.core.compiler.source=11
 org.eclipse.jdt.core.formatter.align_assignment_statements_on_columns=false
 org.eclipse.jdt.core.formatter.align_fields_grouping_blank_lines=2147483647
 org.eclipse.jdt.core.formatter.align_type_members_on_columns=false
@@ -337,7 +337,7 @@ org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_enum_constan
 org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_method_declaration=do not insert
 org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_method_invocation=do not insert
 org.eclipse.jdt.core.formatter.join_lines_in_comments=true
-org.eclipse.jdt.core.formatter.join_wrapped_lines=true
+org.eclipse.jdt.core.formatter.join_wrapped_lines=false
 org.eclipse.jdt.core.formatter.keep_annotation_declaration_on_one_line=one_line_never
 org.eclipse.jdt.core.formatter.keep_anonymous_type_declaration_on_one_line=one_line_never
 org.eclipse.jdt.core.formatter.keep_code_block_on_one_line=one_line_never
