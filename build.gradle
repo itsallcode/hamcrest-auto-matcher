@@ -2,7 +2,9 @@ plugins {
     id "java-library"
     id "signing"
     id "maven-publish"
+    id "jacoco"
     id "com.github.hierynomus.license" version "0.15.0"
+    id "org.sonarqube" version "3.1.1"
 }
 
 repositories {
@@ -38,6 +40,14 @@ tasks.withType(JavaCompile) {
 license {
     header = file('gradle/license-header.txt')
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+rootProject.tasks["sonarqube"].dependsOn(tasks["jacocoTestReport"])
 
 def getOptionalProperty(String name) {
     if(project.hasProperty(name)) {
