@@ -2,6 +2,9 @@
 
 Automatic hamcrest matcher for model classes for Java 11
 
+[![Build](https://github.com/itsallcode/hamcrest-auto-matcher/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/hamcrest-auto-matcher/actions/workflows/build.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/hamcrest-auto-matcher)](https://search.maven.org/artifact/org.itsallcode/hamcrest-auto-matcher)
+
 ## Why use hamcrest-auto-matcher?
 
 Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnosingMatcher`](http://hamcrest.org/JavaHamcrest/javadoc/1.3/org/hamcrest/TypeSafeDiagnosingMatcher.html) is a good idea, because it gives you a readable diff of actual and expected property values. But doing it by hand is tedious and hard to get right, especially for classes with many properties:
