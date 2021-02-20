@@ -3,6 +3,8 @@
 Automatic hamcrest matcher for model classes for Java 11
 
 [![Build](https://github.com/itsallcode/hamcrest-auto-matcher/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/hamcrest-auto-matcher/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Ahamcrest-auto-matcher&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Ahamcrest-auto-matcher)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Ahamcrest-auto-matcher&metric=coverage)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Ahamcrest-auto-matcher)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/hamcrest-auto-matcher)](https://search.maven.org/artifact/org.itsallcode/hamcrest-auto-matcher)
 
 ## Why use hamcrest-auto-matcher?
