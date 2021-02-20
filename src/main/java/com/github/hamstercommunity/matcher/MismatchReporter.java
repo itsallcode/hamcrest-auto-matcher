@@ -46,18 +46,15 @@ public class MismatchReporter {
 	}
 
 	/**
-	 * Check if the actual object matches using the given {@link Matcher} and
-	 * record a message if it does not match.
+	 * Check if the actual object matches using the given {@link Matcher} and record
+	 * a message if it does not match.
 	 * 
-	 * @param message
-	 *            the message to output in case of a failed match
-	 * @param matcher
-	 *            the {@link Matcher} used for checking the actual value
-	 * @param actual
-	 *            the actual value that will be compared using the
-	 *            {@link Matcher}.
-	 * @return this {@link MismatchReporter} allowing a fluent programming
-	 *         style.
+	 * @param message the message to output in case of a failed match
+	 * @param matcher the {@link Matcher} used for checking the actual value
+	 * @param actual  the actual value that will be compared using the
+	 *                {@link Matcher}.
+	 * @param <T>     the type of the matcher.
+	 * @return this {@link MismatchReporter} allowing a fluent programming style.
 	 */
 	public <T> MismatchReporter checkMismatch(final String message, final Matcher<T> matcher, final T actual) {
 		if (!matcher.matches(actual)) {

@@ -24,8 +24,7 @@ import org.hamcrest.SelfDescribing;
 /**
  * This class builds a {@link Description} based on {@link Matcher} and a
  * description. It can be used for
- * {@link org.hamcrest.TypeSafeDiagnosingMatcher.TypeSafeDiagnosingMatcher#describeTo(Description)}
- * .
+ * {@link org.hamcrest.TypeSafeDiagnosingMatcher#describeTo(Description)}.
  */
 public class DescriptionBuilder {
 	private final Description description;

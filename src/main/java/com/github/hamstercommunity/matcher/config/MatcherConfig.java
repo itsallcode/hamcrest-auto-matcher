@@ -52,11 +52,13 @@ public class MatcherConfig<T> {
 	}
 
 	public static <B> Builder<B> builder(final B expected) {
-		return new Builder<B>(expected);
+		return new Builder<>(expected);
 	}
 
 	/**
-	 * Builder for {@link MatcherConfig}
+	 * Builder for {@link MatcherConfig}.
+	 * 
+	 * @param <B> The type of the model to compare.
 	 */
 	public static class Builder<B> {
 		private final B expected;
@@ -67,13 +69,12 @@ public class MatcherConfig<T> {
 		}
 
 		/**
-		 * Add a property that can be compared with
-		 * {@link Matchers#equalTo(Object)}.
+		 * Add a property that can be compared with {@link Matchers#equalTo(Object)}.
 		 *
-		 * @param propertyName
-		 *            name of the property.
-		 * @param propertyAccessor
-		 *            the accessor function for retrieving the property value.
+		 * @param propertyName     name of the property.
+		 * @param propertyAccessor the accessor function for retrieving the property
+		 *                         value.
+		 * @param <P>              the type of the property.
 		 * @return the builder itself for fluent programming style.
 		 */
 		public <P> Builder<B> addEqualsProperty(final String propertyName, final Function<B, P> propertyAccessor) {
@@ -81,15 +82,13 @@ public class MatcherConfig<T> {
 		}
 
 		/**
-		 * Add a property that can be compared with
-		 * {@link Matchers#equalTo(Object)}.
+		 * Add a property that can be compared with {@link Matchers#equalTo(Object)}.
 		 *
-		 * @param propertyName
-		 *            name of the property.
-		 * @param propertyAccessor
-		 *            the accessor function for retrieving the property value.
-		 * @param matcherBuilder
-		 *            a function for creating the matcher.
+		 * @param propertyName     name of the property.
+		 * @param propertyAccessor the accessor function for retrieving the property
+		 *                         value.
+		 * @param matcherBuilder   a function for creating the matcher.
+		 * @param <P>              the type of the property.
 		 * @return the builder itself for fluent programming style.
 		 */
 		public <P> Builder<B> addProperty(final String propertyName, final Function<B, P> propertyAccessor,
@@ -109,16 +108,14 @@ public class MatcherConfig<T> {
 		}
 
 		/**
-		 * Add a property of type {@link Iterable} where the element order is
-		 * relevant.
+		 * Add a property of type {@link Iterable} where the element order is relevant.
 		 *
-		 * @param propertyName
-		 *            name of the property.
-		 * @param propertyAccessor
-		 *            the accessor function for retrieving the property value.
-		 * @param matcherBuilder
-		 *            a function for creating the matcher for the iterable
-		 *            elements.
+		 * @param propertyName     name of the property.
+		 * @param propertyAccessor the accessor function for retrieving the property
+		 *                         value.
+		 * @param matcherBuilder   a function for creating the matcher for the iterable
+		 *                         elements.
+		 * @param <P>              the type of the property.
 		 * @return the builder itself for fluent programming style.
 		 */
 		public <P> Builder<B> addIterableProperty(final String propertyName,
@@ -135,7 +132,7 @@ public class MatcherConfig<T> {
 				return createNullIterableMatcher();
 			}
 			if (!expectedPropertyValue.iterator().hasNext()) {
-				return Matchers.<P> emptyIterable();
+				return Matchers.<P>emptyIterable();
 			}
 			final List<Matcher<? super P>> matchers = StreamSupport.stream(expectedPropertyValue.spliterator(), false)
 					.map(matcherBuilder) //
@@ -160,7 +157,7 @@ public class MatcherConfig<T> {
 		 * @return the new {@link MatcherConfig}.
 		 */
 		public MatcherConfig<B> build() {
-			return new MatcherConfig<B>(this.expected, new ArrayList<>(this.properties));
+			return new MatcherConfig<>(this.expected, new ArrayList<>(this.properties));
 		}
 	}
 
