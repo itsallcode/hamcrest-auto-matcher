@@ -4,5 +4,4 @@
 .classpath
 bin/
 build/
-gradle.properties
 .README.md.html

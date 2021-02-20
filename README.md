@@ -15,7 +15,7 @@ Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnos
 
 ## Requirements
 
-Java 8
+Java 11
 
 ## How to use hamcrest-auto-matcher in your project
 
@@ -24,20 +24,20 @@ Java 8
 #### Gradle
 ```groovy
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    testCompile 'com.github.kaklakariada:hamcrest-auto-matcher:0.4.3'
+    testCompile 'org.itsallcode:hamcrest-auto-matcher:0.5.0'
 }
 ```
 
 #### Maven
 ```xml
 <dependency>
-    <groupId>com.github.kaklakariada</groupId>
+    <groupId>org.itsallcode</groupId>
     <artifactId>hamcrest-auto-matcher</artifactId>
-    <version>0.4.3</version>
+    <version>0.5.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -168,19 +168,28 @@ $ ./gradlew licenseFormat
 
 ### Publish to jcenter
 
-1. Create file `gradle.properties` in project directory with the following content and enter your bintray account:
+1. Add the following to your `~/.gradle/gradle.properties`:
 
     ```properties
-    bintrayUser = <user>
-    bintrayApiKey = <apiKey>
+    ossrhUsername=<your maven central username>
+    ossrhPassword=<your maven central passwort>
+
+    signing.keyId=<gpg key id (last 8 chars)>
+    signing.password=<gpg key password>
+    signing.secretKeyRingFile=<path to secret keyring file>
     ```
 
-2. Increment version number in `build.gradle`, commit and push.
+2. Increment version number in `build.gradle`, update version in README.md, commit and push.
 3. Run the following command:
 
     ```bash
-    $ ./gradlew clean build check bintrayUpload -i
+    $ ./gradlew clean check build publish -i
     ```
 
 4. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
-5. Sign in at https://bintray.com/ and publish the uploaded artifacts.
+5. Release the artifacts at Maven Central:
+    1. Login at [oss.sonatype.org](https://oss.sonatype.org).
+    2. Go to the [staging repositories](https://oss.sonatype.org/#stagingRepositories).
+    3. Select repository named `orgitsallcode-*` and click the "Close" button.
+    4. When closing was successfull, click the "Release" button.
+    5. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
