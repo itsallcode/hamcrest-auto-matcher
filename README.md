@@ -185,13 +185,8 @@ $ ./gradlew licenseFormat
 3. Run the following command:
 
     ```bash
-    $ ./gradlew clean check build publish --info
+    $ ./gradlew clean check build publish closeAndReleaseRepository --info
     ```
 
 4. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
-5. Release the artifacts at Maven Central:
-    1. Login at [oss.sonatype.org](https://oss.sonatype.org).
-    2. Go to the [staging repositories](https://oss.sonatype.org/#stagingRepositories).
-    3. Select repository named `orgitsallcode-*` and click the "Close" button.
-    4. When closing was successfull, click the "Release" button.
-    5. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
+5. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
