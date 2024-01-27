@@ -162,12 +162,6 @@ $ ./gradlew check
 
 Import into eclipse using [buildship](https://projects.eclipse.org/projects/tools.buildship).
 
-### Generate license header for added files
-
-```bash
-$ ./gradlew licenseFormat
-```
-
 ### Run sonar analysis
 
 ```bash

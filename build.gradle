@@ -3,7 +3,6 @@ plugins {
     id "signing"
     id "maven-publish"
     id "jacoco"
-    id "com.github.hierynomus.license" version "0.15.0"
     id "org.sonarqube" version "4.4.1.3373"
     id "io.codearte.nexus-staging" version "0.30.0"
     id "com.github.ben-manes.versions" version "0.50.0"
@@ -37,10 +36,6 @@ javadoc {
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:all'
     options.encoding = 'UTF-8'
-}
-
-license {
-    header = file('gradle/license-header.txt')
 }
 
 jacocoTestReport {
