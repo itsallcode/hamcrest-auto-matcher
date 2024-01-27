@@ -4,8 +4,9 @@ plugins {
     id "maven-publish"
     id "jacoco"
     id "com.github.hierynomus.license" version "0.15.0"
-    id "org.sonarqube" version "3.1.1"
-    id "io.codearte.nexus-staging" version "0.22.0"
+    id "org.sonarqube" version "4.4.1.3373"
+    id "io.codearte.nexus-staging" version "0.30.0"
+    id "com.github.ben-manes.versions" version "0.50.0"
 }
 
 repositories {
@@ -44,11 +45,18 @@ license {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 
 rootProject.tasks["sonarqube"].dependsOn(tasks["jacocoTestReport"])
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.organization", "itsallcode"
+    }
+}
 
 def getOptionalProperty(String name) {
     if(project.hasProperty(name)) {
@@ -111,4 +119,17 @@ nexusStaging {
     packageGroup = project.group
     username = getOptionalProperty("ossrhUsername")
     password = getOptionalProperty("ossrhPassword")
+}
+
+def isNonStable = { String version ->
+  def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+  def regex = /^[0-9,.v-]+(-r)?$/
+  return !stableKeyword && !(version ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+  gradleReleaseChannel = "current"
+  rejectVersionIf {
+    isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+  }
 }

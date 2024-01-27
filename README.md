@@ -168,6 +168,12 @@ Import into eclipse using [buildship](https://projects.eclipse.org/projects/tool
 $ ./gradlew licenseFormat
 ```
 
+### Run sonar analysis
+
+```bash
+./gradlew clean sonar --info -Dsonar.token=[token]
+```
+
 ### Publish to Maven Central
 
 1. Add the following to your `~/.gradle/gradle.properties`:
