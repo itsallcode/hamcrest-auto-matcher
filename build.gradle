@@ -14,8 +14,6 @@ repositories {
 
 dependencies {
     implementation 'org.hamcrest:hamcrest-all:1.3'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.j8unit:core:4.12.1'
 }
 
 group 'org.itsallcode'
@@ -32,8 +30,12 @@ java {
 testing {
     suites {
         test {
-            //useJUnitJupiter()
-            useJUnit()
+            var junitVersion = '5.10.1'
+            useJUnitJupiter(junitVersion)
+            dependencies {
+                implementation 'org.j8unit:core:4.12.1'
+                implementation "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+            }
         }
     }
 }
