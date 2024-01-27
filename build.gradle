@@ -21,6 +21,7 @@ version = '0.5.0'
 
 java {
     toolchain {
+        def javaVersion = project.hasProperty('javaVersion') ? project.getProperty('javaVersion') : 11
         languageVersion = JavaLanguageVersion.of(11)
     }
     withJavadocJar()
