@@ -153,8 +153,9 @@ Also see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/
 ## Development
 
 ```bash
-$ git clone https://github.com/itsallcode/hamcrest-auto-matcher.git
-$ ./gradlew check
+git clone https://github.com/itsallcode/hamcrest-auto-matcher.git
+cd hamcrest-auto-matcher
+./gradlew check
 # Test report: build/reports/tests/index.html
 ```
 
@@ -174,6 +175,16 @@ Import into eclipse using [buildship](https://projects.eclipse.org/projects/tool
 ./gradlew dependencyUpdates
 ```
 
+
+### Test Coverage
+
+To calculate and view test coverage:
+
+```sh
+./gradlew check jacocoTestReport
+open build/reports/jacoco/test/html/index.html
+```
+
 ### Publish to Maven Central
 
 1. Add the following to your `~/.gradle/gradle.properties`:
@@ -187,12 +198,18 @@ Import into eclipse using [buildship](https://projects.eclipse.org/projects/tool
     signing.secretKeyRingFile=<path to secret keyring file>
     ```
 
-2. Increment version number in `build.gradle`, update version in README.md, commit and push.
-3. Run the following command:
+2. Increment version number in `build.gradle` and `README.md`, commit and push.
+3. Optional: run the following command to do a dry-run:
 
-    ```bash
-    $ ./gradlew clean check build publish closeAndReleaseRepository --info
+    ```sh
+    ./gradlew clean check build publishToSonatype closeSonatypeStagingRepository --info
     ```
 
-4. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
-5. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
+4. Run the following command to publish to Maven Central:
+
+    ```sh
+    ./gradlew clean check build publishToSonatype closeAndReleaseSonatypeStagingRepository --info
+    ```
+
+5. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
+6. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
