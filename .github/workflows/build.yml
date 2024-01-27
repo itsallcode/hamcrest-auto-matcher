@@ -34,12 +34,12 @@ jobs:
           21
     - uses: gradle/wrapper-validation-action@v1
     - name: Build with Java ${{ matrix.java }}
-      run: ./gradlew build --warning-mode=summary -PjavaVersion=${{ matrix.java }}
+      run: ./gradlew build --info --warning-mode=summary -PjavaVersion=${{ matrix.java }}
     - name: Sonar analysis
       if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
-        ./gradlew sonarqube -Dsonar.token=$SONAR_TOKEN \
-                            --warning-mode=summary
+        ./gradlew sonarqube -Dsonar.token=$SONAR_TOKEN -PjavaVersion=${{ matrix.java }} \
+                            --info --warning-mode=summary
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
