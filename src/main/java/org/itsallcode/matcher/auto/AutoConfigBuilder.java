@@ -183,7 +183,7 @@ class AutoConfigBuilder<T> {
 		return Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "java:S3011" }) // Need to use reflection and setAccessible()
 	private static <T, P> P getPropertyValue(final Method method, final T object) {
 		final Class<?> declaringClass = method.getDeclaringClass();
 		if (!declaringClass.isInstance(object)) {
