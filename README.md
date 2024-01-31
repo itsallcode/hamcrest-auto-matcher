@@ -119,6 +119,8 @@ public class DemoAttribute {
 Use [`AutoMatcher.equalTo()`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
 
 ```java
+org.itsallcode.matcher.auto.AutoMatcher;
+
 DemoModel expected = ...;
 DemoModel actual = ...;
 assertThat(actual, AutoMatcher.equalTo(expected));
