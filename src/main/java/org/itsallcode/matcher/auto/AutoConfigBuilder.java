@@ -60,19 +60,20 @@ class AutoConfigBuilder<T> {
 	}
 
 	public static <T> Matcher<T> createEqualToMatcher(final T expected) {
-		if (expected.getClass().isArray()) {
+		final Class<? extends Object> type = expected.getClass();
+		if (type.isArray()) {
 			return createArrayMatcher(expected);
 		}
-		if (isSimpleType(expected.getClass())) {
+		if (isSimpleType(type)) {
 			return Matchers.equalTo(expected);
 		}
-		if (Map.class.isAssignableFrom(expected.getClass())) {
+		if (Map.class.isAssignableFrom(type)) {
 			return createMapContainsMatcher(expected);
 		}
-		if (Iterable.class.isAssignableFrom(expected.getClass())) {
+		if (Iterable.class.isAssignableFrom(type)) {
 			return createIterableContainsMatcher(expected);
 		}
-		if (Optional.class.isAssignableFrom(expected.getClass())) {
+		if (Optional.class.isAssignableFrom(type)) {
 			return createOptionalMatcher(expected);
 		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
