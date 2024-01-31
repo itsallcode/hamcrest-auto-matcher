@@ -15,9 +15,11 @@ Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnos
 * Good layout of actual and expected property values is hard to get right.
 * Each property occurs in multiple places which violates the [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) principle.
 
-## Requirements
+## Project Information
 
-Java 11
+* [Changelog](CHANGELOG.md)
+* Requirements
+  * Java 11
 
 ## How to use hamcrest-auto-matcher in your project
 
