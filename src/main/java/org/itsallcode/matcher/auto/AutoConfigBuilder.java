@@ -172,16 +172,23 @@ class AutoConfigBuilder<T> {
 		return false;
 	}
 
-	private String getPropertyName(final String methodName) {
-		int prefixLength = 3;
-		if (methodName.startsWith("is")) {
+	static String getPropertyName(final String methodName) {
+		final int prefixLength;
+		if (methodName.startsWith("get")) {
+			prefixLength = 3;
+		} else if (methodName.startsWith("is")) {
 			prefixLength = 2;
+		} else {
+			return methodName;
+		}
+		if (methodName.length() == prefixLength) {
+			return methodName;
 		}
 		final String propertyName = methodName.substring(prefixLength);
 		return decapitalize(propertyName);
 	}
 
-	private String decapitalize(final String string) {
+	private static String decapitalize(final String string) {
 		return Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
