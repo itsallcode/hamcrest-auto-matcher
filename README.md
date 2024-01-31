@@ -202,7 +202,7 @@ open build/reports/jacoco/test/html/index.html
     signing.secretKeyRingFile=<path to secret keyring file>
     ```
 
-2. Increment version number in `build.gradle` and `README.md`, commit and push.
+2. Increment version number in `build.gradle` and `README.md`, update `CHANGELOG.md`, commit and push.
 3. Optional: run the following command to do a dry-run:
 
     ```sh
