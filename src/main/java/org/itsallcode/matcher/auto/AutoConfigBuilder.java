@@ -8,7 +8,11 @@ import java.io.File;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.Map.Entry;
@@ -30,8 +34,10 @@ class AutoConfigBuilder<T> {
 
 	private static final Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(new HashSet<>(asList(String.class,
 			Long.class, Integer.class, Byte.class, Boolean.class, Float.class, Double.class, Character.class,
-			Short.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class, Currency.class,
-			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class)));
+			Short.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, java.sql.Date.class,
+			java.sql.Timestamp.class, Instant.class, LocalDate.class,
+			Temporal.class, Currency.class,
+			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class, URL.class, URI.class)));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
@@ -54,17 +60,21 @@ class AutoConfigBuilder<T> {
 	}
 
 	public static <T> Matcher<T> createEqualToMatcher(final T expected) {
-		if (expected.getClass().isArray()) {
+		final Class<? extends Object> type = expected.getClass();
+		if (type.isArray()) {
 			return createArrayMatcher(expected);
 		}
-		if (isSimpleType(expected.getClass())) {
+		if (isSimpleType(type)) {
 			return Matchers.equalTo(expected);
 		}
-		if (Map.class.isAssignableFrom(expected.getClass())) {
+		if (Map.class.isAssignableFrom(type)) {
 			return createMapContainsMatcher(expected);
 		}
-		if (Iterable.class.isAssignableFrom(expected.getClass())) {
+		if (Iterable.class.isAssignableFrom(type)) {
 			return createIterableContainsMatcher(expected);
+		}
+		if (Optional.class.isAssignableFrom(type)) {
+			return createOptionalMatcher(expected);
 		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
@@ -122,6 +132,15 @@ class AutoConfigBuilder<T> {
 		return matcher;
 	}
 
+	@SuppressWarnings("unchecked")
+	private static <T> Matcher<T> createOptionalMatcher(final T expected) {
+		final Optional<T> expectedOptional = (Optional<T>) expected;
+		if (expectedOptional.isEmpty()) {
+			return (Matcher<T>) OptionalMatchers.isEmpty();
+		}
+		return (Matcher<T>) OptionalMatchers.isPresentAnd(AutoMatcher.equalTo(expectedOptional.get()));
+	}
+
 	private boolean isNotBlackListed(final Method method) {
 		final Set<String> blacklist = new HashSet<>(
 				asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
@@ -170,16 +189,23 @@ class AutoConfigBuilder<T> {
 		return false;
 	}
 
-	private String getPropertyName(final String methodName) {
-		int prefixLength = 3;
-		if (methodName.startsWith("is")) {
+	static String getPropertyName(final String methodName) {
+		final int prefixLength;
+		if (methodName.startsWith("get")) {
+			prefixLength = 3;
+		} else if (methodName.startsWith("is")) {
 			prefixLength = 2;
+		} else {
+			return methodName;
+		}
+		if (methodName.length() == prefixLength) {
+			return methodName;
 		}
 		final String propertyName = methodName.substring(prefixLength);
 		return decapitalize(propertyName);
 	}
 
-	private String decapitalize(final String string) {
+	private static String decapitalize(final String string) {
 		return Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
