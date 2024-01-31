@@ -32,6 +32,7 @@ class OptionalMatchers {
      * @return a matcher that matches when the examined {@code Optional} contains no
      *         value.
      */
+    @SuppressWarnings("java:S1452") // Generic wildcard required here
     static Matcher<Optional<?>> isEmpty() {
         return new EmptyMatcher();
     }
@@ -50,7 +51,7 @@ class OptionalMatchers {
         @Override
         protected void describeMismatchSafely(final Optional<?> item, final Description mismatchDescription) {
             mismatchDescription.appendText("had value ");
-            mismatchDescription.appendValue(item.get());
+            mismatchDescription.appendValue(item.orElseThrow());
         }
     }
 
