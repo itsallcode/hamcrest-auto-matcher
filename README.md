@@ -15,9 +15,11 @@ Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnos
 * Good layout of actual and expected property values is hard to get right.
 * Each property occurs in multiple places which violates the [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) principle.
 
-## Requirements
+## Project Information
 
-Java 11
+* [Changelog](CHANGELOG.md)
+* Requirements
+  * Java 11
 
 ## How to use hamcrest-auto-matcher in your project
 
@@ -44,9 +46,9 @@ dependencies {
 </dependency>
 ```
 
-### Using [`AutoMatcher`](src/main/java/com/github/hamstercommunity/matcher/auto/AutoMatcher.java)
+### Using [`AutoMatcher`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java)
 
-Assume you have two model classes [`DemoModel`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModel.java) and [`DemoAttribute`](src/test/java/com/github/hamstercommunity/matcher/model/DemoAttribute.java):
+Assume you have two model classes [`DemoModel`](src/test/java/org/itsallcode/matcher/model/DemoModel.java) and [`DemoAttribute`](src/test/java/org/itsallcode/matcher/model/DemoAttribute.java):
 
 ```java
 public class DemoModel {
@@ -116,9 +118,11 @@ public class DemoAttribute {
 }
 ```
 
-Use [`AutoMatcher.equalTo()`](src/main/java/com/github/hamstercommunity/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
+Use [`AutoMatcher.equalTo()`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
 
 ```java
+org.itsallcode.matcher.auto.AutoMatcher;
+
 DemoModel expected = ...;
 DemoModel actual = ...;
 assertThat(actual, AutoMatcher.equalTo(expected));
@@ -130,8 +134,8 @@ Expected: {id=<4711>, longVal=null, name="name1", attr=null, stringArray=null, c
      but: {longVal was <42L>}
 ```
 
-### Using [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/config/ConfigurableMatcher.java)
-If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/com/github/hamstercommunity/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
+### Using [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java)
+If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/org/itsallcode/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
 
 ```java
 public class DemoModelMatcher {
@@ -148,7 +152,7 @@ public class DemoModelMatcher {
     }
 }
 ```
-Also see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
+Also see [`DemoModelMatcher`](src/test/java/org/itsallcode/matcher/model/DemoModelMatcher.java) as an example.
 
 ## Development
 
@@ -198,7 +202,7 @@ open build/reports/jacoco/test/html/index.html
     signing.secretKeyRingFile=<path to secret keyring file>
     ```
 
-2. Increment version number in `build.gradle` and `README.md`, commit and push.
+2. Increment version number in `build.gradle` and `README.md`, update `CHANGELOG.md`, commit and push.
 3. Optional: run the following command to do a dry-run:
 
     ```sh
