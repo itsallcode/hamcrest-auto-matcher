@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.Function;
 
@@ -48,14 +48,11 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 
 		final String expectedExceptionMessage = "\nExpected: " + expectedDescription + "\n" //
 				+ "     but: " + actualDescription;
-		try {
-			assertThat(actual, createMatcher(expected));
-			fail("Expected AssertionError");
-		} catch (final AssertionError e) {
-			assertThat(e, instanceOf(AssertionError.class));
-			assertEquals(expectedExceptionMessage, e.getMessage());
-			assertThat(e.getMessage(), equalTo(expectedExceptionMessage));
-		}
+		final Matcher<? super T> matcher = createMatcher(expected);
+		final AssertionError error = assertThrows(AssertionError.class, () -> assertThat(actual, matcher));
+		assertThat(error, instanceOf(AssertionError.class));
+		assertEquals(expectedExceptionMessage, error.getMessage());
+		assertThat(error.getMessage(), equalTo(expectedExceptionMessage));
 	}
 
 	/**

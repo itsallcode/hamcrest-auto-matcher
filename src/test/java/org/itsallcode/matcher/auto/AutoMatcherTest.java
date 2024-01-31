@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
 
+import org.hamcrest.Matcher;
 import org.itsallcode.matcher.model.DemoAttribute;
 import org.itsallcode.matcher.model.DemoModel;
 import org.junit.Before;
@@ -36,23 +37,26 @@ public class AutoMatcherTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testIncompatibleTypes() {
+		final Matcher<?> matcher = (Matcher<?>) AutoMatcher.equalTo(value1);
 		assertThrows(
 				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1",
 				AssertionError.class,
-				() -> assertThat(1, AutoMatcher.equalTo(value1)));
+				() -> assertThat(1, (Matcher<Integer>) matcher));
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testIncompatibleListMemberTypes() {
 		final Object actual = asList(1);
 		final Object expected = asList(new DemoAttribute("attr"));
-
+		final Matcher<?> matcher = (Matcher<?>) AutoMatcher.equalTo(expected);
 		assertThrows(
 				"Expected object of type " + DemoAttribute.class.getName() + " but got "
 						+ Integer.class.getName() + ": 1",
 				AssertionError.class,
-				() -> assertThat(actual, AutoMatcher.equalTo(expected)));
+				() -> assertThat(actual, (Matcher<Object>) matcher));
 	}
 
 	@Test

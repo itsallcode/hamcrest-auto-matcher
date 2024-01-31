@@ -25,7 +25,7 @@ public class AutoMatcher {
 	}
 
 	@SafeVarargs
-	@SuppressWarnings("java:S1452") // Wildcard type required here
+	@SuppressWarnings({ "java:S1452", "varargs" }) // Wildcard type required here
 	public static <T> Matcher<Iterable<? extends T>> contains(final T... expected) {
 		if (expected.length == 0) {
 			return emptyIterable();
@@ -34,7 +34,7 @@ public class AutoMatcher {
 	}
 
 	@SafeVarargs
-	@SuppressWarnings("java:S1452") // Wildcard type required here
+	@SuppressWarnings({ "java:S1452", "varargs" }) // Wildcard type required here
 	public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(final T... expected) {
 		if (expected.length == 0) {
 			return emptyIterable();
