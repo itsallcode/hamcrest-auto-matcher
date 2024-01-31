@@ -15,7 +15,6 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
 
-import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.matcher.model.DemoAttribute;
 import org.itsallcode.matcher.model.DemoModel;
 import org.junit.Before;
@@ -250,17 +249,17 @@ public class AutoMatcherTest {
 		assertValuesDoNotMatch(UUID.randomUUID(), UUID.randomUUID());
 	}
 
-	private DemoModel model(String name, int id) {
+	private DemoModel model(final String name, final int id) {
 		return model(name, id,
 				asList(model(name + "-child1", id, emptyList()), model(name + "-child2", id, emptyList())));
 	}
 
-	private DemoModel model(String name, int id, List<DemoModel> children) {
+	private DemoModel model(final String name, final int id, final List<DemoModel> children) {
 		return new DemoModel(id, name + "-" + id, id * 2L, attr(name + "-attr-" + id),
 				new String[] { name + "-item1-" + id, name + "-item2-" + id }, children);
 	}
 
-	private DemoAttribute attr(String value) {
+	private DemoAttribute attr(final String value) {
 		return new DemoAttribute(value);
 	}
 }

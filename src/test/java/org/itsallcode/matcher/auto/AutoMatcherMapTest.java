@@ -8,7 +8,6 @@ import static org.itsallcode.matcher.auto.TestUtil.assertValuesMatch;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import org.itsallcode.matcher.auto.AutoMatcher;
 import org.junit.Test;
 
 public class AutoMatcherMapTest {
