@@ -68,6 +68,9 @@ class AutoConfigBuilder<T> {
 		if (Iterable.class.isAssignableFrom(expected.getClass())) {
 			return createIterableContainsMatcher(expected);
 		}
+		if (Optional.class.isAssignableFrom(expected.getClass())) {
+			return createOptionalMatcher(expected);
+		}
 		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
 		return new ConfigurableMatcher<>(config);
 	}
@@ -122,6 +125,15 @@ class AutoConfigBuilder<T> {
 		@SuppressWarnings("unchecked")
 		final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
 		return matcher;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> Matcher<T> createOptionalMatcher(final T expected) {
+		final Optional<T> expectedOptional = (Optional<T>) expected;
+		if (expectedOptional.isEmpty()) {
+			return (Matcher<T>) OptionalMatchers.isEmpty();
+		}
+		return (Matcher<T>) OptionalMatchers.isPresentAnd(AutoMatcher.equalTo(expectedOptional.get()));
 	}
 
 	private boolean isNotBlackListed(final Method method) {

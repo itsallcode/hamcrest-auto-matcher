@@ -3,8 +3,9 @@ package org.itsallcode.matcher.auto;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.itsallcode.matcher.auto.TestUtil.assertValuesDoNotMatch;
+import static org.itsallcode.matcher.auto.TestUtil.assertValuesMatch;
 import static org.junit.Assert.assertThrows;
 
 import java.io.File;
@@ -266,12 +267,24 @@ public class AutoMatcherTest {
 
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeOptionalEmpty() {
-		assertValuesDoNotMatch(Optional.empty(), Optional.of("a"));
+		assertValuesDoNotMatch(Optional.empty(), Optional.of("a"),
+				equalTo("\nExpected: has value that is \"a\"\n     but: was <Empty>"));
+		assertValuesDoNotMatch(Optional.of("a"), Optional.empty(),
+				equalTo("\nExpected: is <Empty>\n     but: had value \"a\""));
 	}
 
 	@Test
-	public void testAutoMatcherWorksForSimpleTypeOptional() {
-		assertValuesDoNotMatch(Optional.of("b"), Optional.of("a"));
+	public void testAutoMatcherWorksForSimpleTypeOptionalWithString() {
+		assertValuesDoNotMatch(Optional.of("b"), Optional.of("a"),
+				equalTo("\nExpected: has value that is \"a\"\n     but: value was \"b\""));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeOptionalWithModel() {
+		final DemoModel m1 = new DemoModel(1, "a", 1L, null, null, null);
+		final DemoModel m2 = new DemoModel(2, "a", 1L, null, null, null);
+		assertValuesDoNotMatch(Optional.of(m1), Optional.of(m2), containsString("but: value {id was <1>}"));
+		assertValuesMatch(Optional.of(value1), Optional.of(value1Equal));
 	}
 
 	private DemoModel model(final String name, final int id) {
