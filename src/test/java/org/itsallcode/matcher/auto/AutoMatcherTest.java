@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThrows;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.*;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
@@ -251,6 +252,26 @@ public class AutoMatcherTest {
 	@Test
 	public void testAutoMatcherWorksForSimpleTypeUuid() {
 		assertValuesDoNotMatch(UUID.randomUUID(), UUID.randomUUID());
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeUrl() throws MalformedURLException {
+		assertValuesDoNotMatch(new URL("http://example.com"), new URL("http://example.com/test"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeUri() {
+		assertValuesDoNotMatch(URI.create("http://example.com"), URI.create("http://example2.com"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeOptionalEmpty() {
+		assertValuesDoNotMatch(Optional.empty(), Optional.of("a"));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeOptional() {
+		assertValuesDoNotMatch(Optional.of("b"), Optional.of("a"));
 	}
 
 	private DemoModel model(final String name, final int id) {
