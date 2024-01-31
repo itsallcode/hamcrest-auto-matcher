@@ -15,6 +15,7 @@ import java.net.*;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
 import org.hamcrest.Matcher;
@@ -236,8 +237,23 @@ public class AutoMatcherTest {
 	}
 
 	@Test
+	public void testAutoMatcherWorksForSimpleTypeSqlDate() {
+		assertValuesDoNotMatch(new java.sql.Date(1), new java.sql.Date(2));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeSqlTimestamp() {
+		assertValuesDoNotMatch(new java.sql.Timestamp(1), new java.sql.Timestamp(2));
+	}
+
+	@Test
 	public void testAutoMatcherWorksForSimpleTypeInstance() {
 		assertValuesDoNotMatch(Instant.ofEpochMilli(1), Instant.ofEpochMilli(2));
+	}
+
+	@Test
+	public void testAutoMatcherWorksForSimpleTypeLocalDate() {
+		assertValuesDoNotMatch(LocalDate.parse("2024-01-31"), LocalDate.parse("2024-02-01"));
 	}
 
 	@Test

@@ -11,6 +11,8 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.Map.Entry;
@@ -32,7 +34,9 @@ class AutoConfigBuilder<T> {
 
 	private static final Set<Class<?>> SIMPLE_TYPES = Collections.unmodifiableSet(new HashSet<>(asList(String.class,
 			Long.class, Integer.class, Byte.class, Boolean.class, Float.class, Double.class, Character.class,
-			Short.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, Temporal.class, Currency.class,
+			Short.class, BigInteger.class, BigDecimal.class, Calendar.class, Date.class, java.sql.Date.class,
+			java.sql.Timestamp.class, Instant.class, LocalDate.class,
+			Temporal.class, Currency.class,
 			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class, URL.class, URI.class)));
 
 	private final T expected;
