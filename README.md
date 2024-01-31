@@ -44,9 +44,9 @@ dependencies {
 </dependency>
 ```
 
-### Using [`AutoMatcher`](src/main/java/com/github/hamstercommunity/matcher/auto/AutoMatcher.java)
+### Using [`AutoMatcher`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java)
 
-Assume you have two model classes [`DemoModel`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModel.java) and [`DemoAttribute`](src/test/java/com/github/hamstercommunity/matcher/model/DemoAttribute.java):
+Assume you have two model classes [`DemoModel`](src/test/java/org/itsallcode/matcher/model/DemoModel.java) and [`DemoAttribute`](src/test/java/org/itsallcode/matcher/model/DemoAttribute.java):
 
 ```java
 public class DemoModel {
@@ -116,7 +116,7 @@ public class DemoAttribute {
 }
 ```
 
-Use [`AutoMatcher.equalTo()`](src/main/java/com/github/hamstercommunity/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
+Use [`AutoMatcher.equalTo()`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
 
 ```java
 DemoModel expected = ...;
@@ -130,8 +130,8 @@ Expected: {id=<4711>, longVal=null, name="name1", attr=null, stringArray=null, c
      but: {longVal was <42L>}
 ```
 
-### Using [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/config/ConfigurableMatcher.java)
-If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/com/github/hamstercommunity/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/com/github/hamstercommunity/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
+### Using [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java)
+If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/org/itsallcode/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
 
 ```java
 public class DemoModelMatcher {
@@ -148,7 +148,7 @@ public class DemoModelMatcher {
     }
 }
 ```
-Also see [`DemoModelMatcher`](src/test/java/com/github/hamstercommunity/matcher/model/DemoModelMatcher.java) as an example.
+Also see [`DemoModelMatcher`](src/test/java/org/itsallcode/matcher/model/DemoModelMatcher.java) as an example.
 
 ## Development
 
