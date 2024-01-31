@@ -20,12 +20,13 @@ public class AutoMatcher {
 		// not instantiable
 	}
 
-	public static <T> Matcher<T> equalTo(T expected) {
+	public static <T> Matcher<T> equalTo(final T expected) {
 		return AutoConfigBuilder.createEqualToMatcher(expected);
 	}
 
 	@SafeVarargs
-	public static <T> Matcher<Iterable<? extends T>> contains(T... expected) {
+	@SuppressWarnings("java:S1452") // Wildcard type required here
+	public static <T> Matcher<Iterable<? extends T>> contains(final T... expected) {
 		if (expected.length == 0) {
 			return emptyIterable();
 		}
@@ -33,14 +34,15 @@ public class AutoMatcher {
 	}
 
 	@SafeVarargs
-	public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(T... expected) {
+	@SuppressWarnings("java:S1452") // Wildcard type required here
+	public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(final T... expected) {
 		if (expected.length == 0) {
 			return emptyIterable();
 		}
 		return Matchers.containsInAnyOrder(getMatchers(expected));
 	}
 
-	private static <T> List<Matcher<? super T>> getMatchers(T[] expected) {
+	private static <T> List<Matcher<? super T>> getMatchers(final T[] expected) {
 		return Arrays.stream(expected) //
 				.map(AutoMatcher::equalTo) //
 				.collect(toList());

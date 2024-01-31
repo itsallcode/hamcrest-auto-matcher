@@ -36,7 +36,7 @@ class AutoConfigBuilder<T> {
 	private final T expected;
 	private final Builder<T> configBuilder;
 
-	private AutoConfigBuilder(T expected) {
+	private AutoConfigBuilder(final T expected) {
 		this.expected = expected;
 		this.configBuilder = MatcherConfig.builder(expected);
 	}
@@ -53,7 +53,7 @@ class AutoConfigBuilder<T> {
 		return configBuilder.build();
 	}
 
-	public static <T> Matcher<T> createEqualToMatcher(T expected) {
+	public static <T> Matcher<T> createEqualToMatcher(final T expected) {
 		if (expected.getClass().isArray()) {
 			return createArrayMatcher(expected);
 		}
@@ -71,7 +71,7 @@ class AutoConfigBuilder<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> Matcher<T> createArrayMatcher(Object expected) {
+	private static <T> Matcher<T> createArrayMatcher(final Object expected) {
 		final Class<T> componentType = (Class<T>) expected.getClass().getComponentType();
 		if (componentType.isPrimitive()) {
 			return (Matcher<T>) Matchers.equalTo(expected);
@@ -90,7 +90,7 @@ class AutoConfigBuilder<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T, K, V> Matcher<T> createMapContainsMatcher(T expected) {
+	private static <T, K, V> Matcher<T> createMapContainsMatcher(final T expected) {
 		final Map<K, V> expectedMap = (Map<K, V>) expected;
 
 		final Collection<Matcher<? super T>> matchers = new ArrayList<>();
@@ -107,11 +107,11 @@ class AutoConfigBuilder<T> {
 	private static <T, K, V> ConfigurableMatcher<T> mapSizeMatcher(final Map<K, V> expectedMap) {
 		@SuppressWarnings("unchecked")
 		final MatcherConfig<T> config = (MatcherConfig<T>) MatcherConfig.builder(expectedMap)
-				.addEqualsProperty("size", map -> map.size()).build();
+				.addEqualsProperty("size", Map::size).build();
 		return new ConfigurableMatcher<>(config);
 	}
 
-	private static <T> Matcher<T> createIterableContainsMatcher(T expected) {
+	private static <T> Matcher<T> createIterableContainsMatcher(final T expected) {
 		@SuppressWarnings("unchecked")
 		final Iterable<T> expectedIterable = (Iterable<T>) expected;
 		final Object[] elements = StreamSupport.stream(expectedIterable //
@@ -122,38 +122,38 @@ class AutoConfigBuilder<T> {
 		return matcher;
 	}
 
-	private boolean isNotBlackListed(Method method) {
+	private boolean isNotBlackListed(final Method method) {
 		final Set<String> blacklist = new HashSet<>(
 				asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
 		return !blacklist.contains(method.getName());
 	}
 
-	private boolean isGetterMethodSignature(Method method) {
+	private boolean isGetterMethodSignature(final Method method) {
 		return method.getParameterCount() == 0 //
 				&& !method.getReturnType().equals(Void.TYPE);
 	}
 
-	private boolean isGetterMethodName(Method method) {
+	private boolean isGetterMethodName(final Method method) {
 		final String methodName = method.getName();
 		return methodName.startsWith("get") //
 				|| methodName.startsWith("is");
 	}
 
-	private void addConfigForGetter(Method method) {
+	private void addConfigForGetter(final Method method) {
 		final String propertyName = getPropertyName(method.getName());
 		LOG.finest(() -> "Adding general property '" + propertyName + "' for getter " + method);
 		configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
 	}
 
-	private boolean hasArrayReturnType(Method method) {
+	private boolean hasArrayReturnType(final Method method) {
 		return method.getReturnType().isArray();
 	}
 
-	private <P> Function<T, P> createGetter(Method method) {
-		return (object) -> getPropertyValue(method, object);
+	private <P> Function<T, P> createGetter(final Method method) {
+		return object -> getPropertyValue(method, object);
 	}
 
-	private boolean hasSimpleReturnType(Method method) {
+	private boolean hasSimpleReturnType(final Method method) {
 		final Class<? extends Object> type = method.getReturnType();
 		if (type.isPrimitive() || type.isEnum()) {
 			return true;
@@ -170,7 +170,7 @@ class AutoConfigBuilder<T> {
 		return false;
 	}
 
-	private String getPropertyName(String methodName) {
+	private String getPropertyName(final String methodName) {
 		int prefixLength = 3;
 		if (methodName.startsWith("is")) {
 			prefixLength = 2;
@@ -184,7 +184,7 @@ class AutoConfigBuilder<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T, P> P getPropertyValue(Method method, T object) {
+	private static <T, P> P getPropertyValue(final Method method, final T object) {
 		final Class<?> declaringClass = method.getDeclaringClass();
 		if (!declaringClass.isInstance(object)) {
 			throw new AssertionError("Expected object of type " + declaringClass.getName() + " but got "
@@ -196,7 +196,7 @@ class AutoConfigBuilder<T> {
 		try {
 			return (P) method.invoke(object);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new RuntimeException("Error invoking method " + method + " on object " + object + " of type "
+			throw new IllegalStateException("Error invoking method " + method + " on object " + object + " of type "
 					+ object.getClass().getName(), e);
 		}
 	}
