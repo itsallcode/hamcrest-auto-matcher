@@ -10,59 +10,59 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.itsallcode.matcher.model.DemoAttribute;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AutoMatcherListTest {
+class AutoMatcherListTest {
 
 	@Test
-	public void testEmptyList() {
+	void testEmptyList() {
 		assertValuesDoNotMatch(emptyList(), singletonList("value2"));
 	}
 
 	@Test
-	public void testIncompatibleMemberTypes() {
+	void testIncompatibleMemberTypes() {
 		assertValuesDoNotMatch(asList("string"), asList(1));
 	}
 
 	@Test
-	public void testIncompatibleMemberTypesComplexTypes() {
+	void testIncompatibleMemberTypesComplexTypes() {
 		assertValuesDoNotMatch(asList(new DemoAttribute("attr")), asList(1));
 	}
 
 	@Test
-	public void testEmptyListAndNewArrayList() {
+	void testEmptyListAndNewArrayList() {
 		assertValuesMatch(emptyList(), new ArrayList<>());
 	}
 
 	@Test
-	public void testEmptyListAndNewLinkedList() {
+	void testEmptyListAndNewLinkedList() {
 		assertValuesMatch(emptyList(), new LinkedList<>());
 	}
 
 	@Test
-	public void testEmptyListAndAsListAreEqaul() {
+	void testEmptyListAndAsListAreEqaul() {
 		assertValuesMatch(emptyList(), asList());
 	}
 
 	@Test
-	public void testSingletonList() {
+	void testSingletonList() {
 		assertValuesDoNotMatch(singletonList("value1"), singletonList("value2"));
 	}
 
 	@Test
-	public void testAsListWithDuplicateValue() {
+	void testAsListWithDuplicateValue() {
 		assertValuesDoNotMatch(asList("value1"), asList("value1", "value1"));
 	}
 
 	@Test
-	public void testSingletonListAndNewArrayListWith1Entry() {
+	void testSingletonListAndNewArrayListWith1Entry() {
 		final ArrayList<String> list = new ArrayList<>();
 		list.add("value1");
 		assertValuesMatch(singletonList("value1"), list);
 	}
 
 	@Test
-	public void testAsListAndNewArrayListWith1Entry() {
+	void testAsListAndNewArrayListWith1Entry() {
 		final ArrayList<String> list = new ArrayList<>();
 		list.add("value1");
 		assertValuesMatch(asList("value1"), list);

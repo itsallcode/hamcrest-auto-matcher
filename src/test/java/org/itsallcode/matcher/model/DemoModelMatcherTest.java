@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.itsallcode.matcher.config.ConfigurableMatcher;
 import org.itsallcode.matcher.test.MatcherTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This tests {@link ConfigurableMatcher} and demonstrates usage of
@@ -241,19 +241,20 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 		return model(ID1, NAME1, attr(ATTR1), asList(model(ID2, NAME2, attr(ATTR2), emptyList())));
 	}
 
-	static DemoModel modelWithStringArray(String[] array) {
+	static DemoModel modelWithStringArray(final String[] array) {
 		return new DemoModel(ID1, NAME1, null, null, array, null);
 	}
 
-	static DemoModel modelWithLongVal(Long val) {
+	static DemoModel modelWithLongVal(final Long val) {
 		return new DemoModel(ID1, NAME1, val, null, null, null);
 	}
 
-	static DemoModel model(int id, String name, DemoAttribute attribute, List<DemoModel> children) {
+	static DemoModel model(final int id, final String name, final DemoAttribute attribute,
+			final List<DemoModel> children) {
 		return new DemoModel(id, name, null, attribute, null, children);
 	}
 
-	static DemoAttribute attr(String value) {
+	static DemoAttribute attr(final String value) {
 		return new DemoAttribute(value);
 	}
 }
