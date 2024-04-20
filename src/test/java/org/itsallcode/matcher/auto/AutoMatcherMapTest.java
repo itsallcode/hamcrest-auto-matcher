@@ -6,9 +6,9 @@ import static org.itsallcode.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static org.itsallcode.matcher.auto.TestUtil.assertValuesMatch;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.*;
 
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 
 class AutoMatcherMapTest {
@@ -45,8 +45,9 @@ class AutoMatcherMapTest {
 
 	@Test
 	void testIncompatibleTypesClassNotPublic() {
-		assertThrows(ClassCastException.class,
-				() -> assertThat(singletonList("value1"), AutoMatcher.equalTo(singletonMap("key", "value"))));
+		final List<String> actual = singletonList("value1");
+		final Matcher<Object> matcher = AutoMatcher.equalTo(singletonMap("key", "value"));
+		assertThrows(ClassCastException.class, () -> assertThat(actual, matcher));
 	}
 
 	@Test
