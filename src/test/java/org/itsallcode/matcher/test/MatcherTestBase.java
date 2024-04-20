@@ -4,14 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.Function;
 
 import org.hamcrest.*;
-import org.j8unit.J8UnitTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
@@ -19,14 +18,16 @@ import org.junit.Test;
  * @param <T> the type compared by the {@link TypeSafeDiagnosingMatcher} under
  *            test.
  */
-public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> {
+public abstract class MatcherTestBase<T> {
 
-	@Test(expected = NullPointerException.class)
-	public default void testNullObject() {
-		createMatcher(null);
+	protected abstract Function<T, Matcher<T>> createNewSUT();
+
+	@Test
+	void testNullObject() {
+		assertThrows(NullPointerException.class, () -> createMatcher(null));
 	}
 
-	default void assertMatch(final T object) {
+	protected void assertMatch(final T object) {
 		assertThat(object, createMatcher(object));
 		assertThat(getDescription(object), equalTo(getDescription(object)));
 	}
@@ -40,7 +41,7 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 	 * @param expected            the expected object being compared
 	 * @param actual              the actual object being compared
 	 */
-	default void assertFailureDescription(final String expectedDescription, final String actualDescription,
+	protected void assertFailureDescription(final String expectedDescription, final String actualDescription,
 			final T expected,
 			final T actual) {
 
@@ -61,11 +62,11 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 	 * @param expected the expected object
 	 * @return a matcher for the given expected object
 	 */
-	default Matcher<? super T> createMatcher(final T expected) {
+	protected Matcher<? super T> createMatcher(final T expected) {
 		return createNewSUT().apply(expected);
 	}
 
-	default void assertNoMatch(final T objectA, final T objectB) {
+	protected void assertNoMatch(final T objectA, final T objectB) {
 		assertMatch(objectA);
 		assertMatch(objectB);
 		assertThat(objectA, not(createMatcher(objectB)));
@@ -76,7 +77,7 @@ public interface MatcherTestBase<T> extends J8UnitTest<Function<T, Matcher<T>>> 
 		assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
 	}
 
-	default String getDescription(final T object) {
+	protected String getDescription(final T object) {
 		final StringDescription description = new StringDescription();
 		createMatcher(object).describeTo(description);
 		return description.toString();

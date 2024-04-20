@@ -33,10 +33,6 @@ testing {
         test {
             var junitVersion = '5.10.2'
             useJUnitJupiter(junitVersion)
-            dependencies {
-                implementation 'org.j8unit:core:4.12.1'
-                implementation "org.junit.vintage:junit-vintage-engine:${junitVersion}"
-            }
         }
     }
 }

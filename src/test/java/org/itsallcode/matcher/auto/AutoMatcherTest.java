@@ -6,7 +6,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.itsallcode.matcher.auto.TestUtil.assertValuesDoNotMatch;
 import static org.itsallcode.matcher.auto.TestUtil.assertValuesMatch;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -43,10 +44,12 @@ class AutoMatcherTest {
 	@SuppressWarnings("unchecked")
 	void testIncompatibleTypes() {
 		final Matcher<?> matcher = (Matcher<?>) AutoMatcher.equalTo(value1);
-		assertThrows(
-				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1",
+		final AssertionError exception = assertThrows(
 				AssertionError.class,
 				() -> assertThat(1, (Matcher<Integer>) matcher));
+		assertEquals(
+				"Expected object of type " + DemoModel.class.getName() + " but got " + Integer.class.getName() + ": 1",
+				exception.getMessage());
 	}
 
 	@Test
@@ -55,11 +58,11 @@ class AutoMatcherTest {
 		final Object actual = asList(1);
 		final Object expected = asList(new DemoAttribute("attr"));
 		final Matcher<?> matcher = (Matcher<?>) AutoMatcher.equalTo(expected);
-		assertThrows(
-				"Expected object of type " + DemoAttribute.class.getName() + " but got "
-						+ Integer.class.getName() + ": 1",
+		final AssertionError exception = assertThrows(
 				AssertionError.class,
 				() -> assertThat(actual, (Matcher<Object>) matcher));
+		assertEquals("Expected object of type " + DemoAttribute.class.getName() + " but got "
+				+ Integer.class.getName() + ": 1", exception.getMessage());
 	}
 
 	@Test
