@@ -95,6 +95,7 @@ class AutoConfigBuilder<T> {
 			return (Matcher<T>) arrayContaining;
 		}
 		final List<Matcher<?>> matchers = Arrays.stream(expectedArray).map(AutoMatcher::equalTo).collect(toList());
+		@SuppressWarnings("rawtypes")
 		final Matcher<Object[]> arrayContaining = IsArray.array(matchers.toArray(new Matcher[0]));
 		return (Matcher<T>) arrayContaining;
 	}
