@@ -19,6 +19,8 @@ jobs:
     name: "Build with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
+    permissions:
+      contents: read
 
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +34,7 @@ jobs:
           11
           17
           21
-    - uses: gradle/wrapper-validation-action@v1
+    - uses: gradle/actions/wrapper-validation@v3
     - name: Build with Java ${{ matrix.java }}
       run: ./gradlew build --info --warning-mode=summary -PjavaVersion=${{ matrix.java }}
     - name: Sonar analysis
@@ -43,12 +45,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    - name: Publish Test Report
-      uses: scacap/action-surefire-report@v1
-      if: always()
-      with:
-        report_paths: '**/build/test-results/*/TEST-*.xml'
-        github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     needs: matrix-build

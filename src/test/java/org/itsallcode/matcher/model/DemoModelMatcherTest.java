@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.itsallcode.matcher.config.ConfigurableMatcher;
 import org.itsallcode.matcher.test.MatcherTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This tests {@link ConfigurableMatcher} and demonstrates usage of
  * {@link MatcherTestBase}.
  */
-public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
+abstract class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 
 	static final int ID1 = 4711;
 	static final int ID2 = 4242;
@@ -34,27 +34,27 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 			+ ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "], stringArray=null}";
 
 	@Test
-	default void testMatchAllNull() {
+	void testMatchAllNull() {
 		assertMatch(model(ID1, null, null, null));
 	}
 
 	@Test
-	default void testMatchAttributeWithNullValue() {
+	void testMatchAttributeWithNullValue() {
 		assertMatch(model(ID1, null, attr(null), null));
 	}
 
 	@Test
-	default void testMatchEmptyList() {
+	void testMatchEmptyList() {
 		assertMatch(model(ID1, null, null, Collections.emptyList()));
 	}
 
 	@Test
-	default void testMatchAllFieldsDefined() {
+	void testMatchAllFieldsDefined() {
 		assertMatch(model(ID1, NAME1, attr(ATTR1), asList(model(ID2, NAME2, attr(ATTR2), emptyList()))));
 	}
 
 	@Test
-	default void testMessageSimpleDifferentId() {
+	void testMessageSimpleDifferentId() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{id was <" + ID2 + ">}", //
 				expectedSimpleModel(), //
@@ -62,7 +62,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleDifferentName() {
+	void testMessageSimpleDifferentName() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{name was \"" + NAME2 + "\"}", //
 				expectedSimpleModel(), //
@@ -70,7 +70,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleDifferentIdAndName() {
+	void testMessageSimpleDifferentIdAndName() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{id was <" + ID2 + ">, name was \"" + NAME2 + "\"}", //
 				expectedSimpleModel(), //
@@ -78,7 +78,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleAttributeNull() {
+	void testMessageSimpleAttributeNull() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{attr was <DemoAttribute [value=null]>}", //
 				expectedSimpleModel(), //
@@ -86,7 +86,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleAttributeNotNull() {
+	void testMessageSimpleAttributeNotNull() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{attr was <DemoAttribute [value=" + ATTR2 + "]>}", //
 				expectedSimpleModel(), //
@@ -94,7 +94,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleEmptyChildList() {
+	void testMessageSimpleEmptyChildList() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{children was <[]>}", //
 				expectedSimpleModel(), //
@@ -102,7 +102,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageSimpleFilledChildList() {
+	void testMessageSimpleFilledChildList() {
 		final List<DemoModel> actualChildren = asList(model(ID2, null, null, null));
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{children was <" + actualChildren.toString() + ">}", //
@@ -111,7 +111,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexNullAttribute() {
+	void testMessageComplexNullAttribute() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {attr was null}}", //
 				expectedComplexModel(), //
@@ -119,7 +119,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexNullAttributeValue() {
+	void testMessageComplexNullAttributeValue() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {attr {value was null}}}", //
 				expectedComplexModel(), //
@@ -127,7 +127,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexDifferentAttributeValue() {
+	void testMessageComplexDifferentAttributeValue() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {attr {value was \"" + ATTR3 + "\"}}}", //
 				expectedComplexModel(), //
@@ -135,7 +135,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexChildDifferentId() {
+	void testMessageComplexChildDifferentId() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {id was <" + ID3 + ">}}", //
 				expectedComplexModel(), //
@@ -143,7 +143,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexChildDifferentName() {
+	void testMessageComplexChildDifferentName() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {name was \"" + NAME3 + "\"}}", //
 				expectedComplexModel(), //
@@ -151,7 +151,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexChildNullName() {
+	void testMessageComplexChildNullName() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children item 0: {name was null}}", //
 				expectedComplexModel(), //
@@ -159,7 +159,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexEmptyChildList() {
+	void testMessageComplexEmptyChildList() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children No item matched: " + CHILD1 + "}", //
 				expectedComplexModel(), //
@@ -167,7 +167,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexNullChildList() {
+	void testMessageComplexNullChildList() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children was null}", //
 				expectedComplexModel(), //
@@ -175,7 +175,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageComplexAdditionalChild() {
+	void testMessageComplexAdditionalChild() {
 		final DemoModel unmatchedChild = model(ID3, NAME3, null, null);
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
 				"{children Not matched: <" + unmatchedChild.toString() + ">}", //
@@ -186,7 +186,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageStringArrayEmpty() {
+	void testMessageStringArrayEmpty() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{stringArray was []}", //
 				expectedSimpleModel(), //
@@ -194,7 +194,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageStringArraySize1NullContent() {
+	void testMessageStringArraySize1NullContent() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{stringArray was [null]}", //
 				expectedSimpleModel(), //
@@ -202,7 +202,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageStringArraySize3NullContent() {
+	void testMessageStringArraySize3NullContent() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{stringArray was [null, null, null]}", //
 				expectedSimpleModel(), //
@@ -210,7 +210,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageStringArraySize1ValueContent() {
+	void testMessageStringArraySize1ValueContent() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{stringArray was [\"val1\"]}", //
 				expectedSimpleModel(), //
@@ -218,7 +218,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageStringArraySize3ValueContent() {
+	void testMessageStringArraySize3ValueContent() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{stringArray was [\"val1\", \"val2\", \"val3\"]}", //
 				expectedSimpleModel(), //
@@ -226,7 +226,7 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	}
 
 	@Test
-	default void testMessageLongValue() {
+	void testMessageLongValue() {
 		assertFailureDescription(SIMPLE_MODEL_DESCRIPTION, //
 				"{longVal was <42L>}", //
 				expectedSimpleModel(), //
@@ -241,19 +241,20 @@ public interface DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 		return model(ID1, NAME1, attr(ATTR1), asList(model(ID2, NAME2, attr(ATTR2), emptyList())));
 	}
 
-	static DemoModel modelWithStringArray(String[] array) {
+	static DemoModel modelWithStringArray(final String[] array) {
 		return new DemoModel(ID1, NAME1, null, null, array, null);
 	}
 
-	static DemoModel modelWithLongVal(Long val) {
+	static DemoModel modelWithLongVal(final Long val) {
 		return new DemoModel(ID1, NAME1, val, null, null, null);
 	}
 
-	static DemoModel model(int id, String name, DemoAttribute attribute, List<DemoModel> children) {
+	static DemoModel model(final int id, final String name, final DemoAttribute attribute,
+			final List<DemoModel> children) {
 		return new DemoModel(id, name, null, attribute, null, children);
 	}
 
-	static DemoAttribute attr(String value) {
+	static DemoAttribute attr(final String value) {
 		return new DemoAttribute(value);
 	}
 }
