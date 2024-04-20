@@ -156,7 +156,7 @@ Also see [`DemoModelMatcher`](src/test/java/org/itsallcode/matcher/model/DemoMod
 
 ## Development
 
-```bash
+```sh
 git clone https://github.com/itsallcode/hamcrest-auto-matcher.git
 cd hamcrest-auto-matcher
 ./gradlew check
@@ -169,16 +169,15 @@ Import into eclipse using [buildship](https://projects.eclipse.org/projects/tool
 
 ### Run sonar analysis
 
-```bash
+```sh
 ./gradlew clean sonar --info -Dsonar.token=[token]
 ```
 
 ### Check for dependency updates
 
-```bash
+```sh
 ./gradlew dependencyUpdates
 ```
-
 
 ### Test Coverage
 
