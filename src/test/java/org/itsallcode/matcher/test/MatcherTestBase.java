@@ -4,8 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.Function;
 
@@ -25,6 +24,11 @@ public abstract class MatcherTestBase<T> {
 	@Test
 	void testNullObject() {
 		assertThrows(NullPointerException.class, () -> createMatcher(null));
+	}
+
+	@Test
+	void subjectUnderTestMustBeNotNull() {
+		assertNotNull(createNewSUT());
 	}
 
 	protected void assertMatch(final T object) {
