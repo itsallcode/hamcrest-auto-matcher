@@ -161,7 +161,7 @@ abstract class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	@Test
 	void testMessageComplexEmptyChildList() {
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
-				"{children No item matched: " + CHILD1 + "}", //
+				"{children no item was " + CHILD1 + "}", //
 				expectedComplexModel(), //
 				model(ID1, NAME1, attr(ATTR1), emptyList()));
 	}
@@ -178,7 +178,7 @@ abstract class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
 	void testMessageComplexAdditionalChild() {
 		final DemoModel unmatchedChild = model(ID3, NAME3, null, null);
 		assertFailureDescription(COMPLEX_MODEL_DESCRIPTION, //
-				"{children Not matched: <" + unmatchedChild.toString() + ">}", //
+				"{children not matched: <" + unmatchedChild.toString() + ">}", //
 				expectedComplexModel(), //
 				model(ID1, NAME1, attr(ATTR1), //
 						asList(model(ID2, NAME2, attr(ATTR2), emptyList()), //

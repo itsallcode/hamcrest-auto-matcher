@@ -306,6 +306,31 @@ class AutoMatcherTest {
 		assertValuesMatch(Optional.of(value1), Optional.of(value1Equal));
 	}
 
+	@Test
+	void testThrowingModel() {
+		assertThat(new ThrowingModel("a"), AutoMatcher.equalTo(new ThrowingModel("a")));
+		assertThat(new ThrowingModel("a"), not(AutoMatcher.equalTo(new ThrowingModel("b"))));
+	}
+
+	@Test
+	void testGetterOfActualValueThrowsException() {
+		final ThrowingModel actual = new ThrowingModel("throw");
+		final Matcher<ThrowingModel> matcher = AutoMatcher.equalTo(new ThrowingModel("b"));
+		final IllegalStateException exception = assertThrows(IllegalStateException.class,
+				() -> assertThat(actual, matcher));
+		assertThat(exception.getMessage(), equalTo(
+				"Error invoking method public java.lang.String org.itsallcode.matcher.auto.AutoMatcherTest$ThrowingModel.getValue() on object ThrowingModel [value=throw] of type org.itsallcode.matcher.auto.AutoMatcherTest$ThrowingModel"));
+	}
+
+	@Test
+	void testGetterOfExpectedValueThrowsException() {
+		final ThrowingModel expected = new ThrowingModel("throw");
+		final IllegalStateException exception = assertThrows(IllegalStateException.class,
+				() -> AutoMatcher.equalTo(expected));
+		assertThat(exception.getMessage(), equalTo(
+				"Error invoking method public java.lang.String org.itsallcode.matcher.auto.AutoMatcherTest$ThrowingModel.getValue() on object ThrowingModel [value=throw] of type org.itsallcode.matcher.auto.AutoMatcherTest$ThrowingModel"));
+	}
+
 	private DemoModel model(final String name, final int id) {
 		return model(name, id,
 				asList(model(name + "-child1", id, emptyList()), model(name + "-child2", id, emptyList())));
@@ -318,5 +343,26 @@ class AutoMatcherTest {
 
 	private DemoAttribute attr(final String value) {
 		return new DemoAttribute(value);
+	}
+
+	static class ThrowingModel {
+		private final String value;
+
+		public ThrowingModel(final String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			if ("throw".equals(value)) {
+				throw new IllegalStateException("expected");
+			} else {
+				return value;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "ThrowingModel [value=" + value + "]";
+		}
 	}
 }
