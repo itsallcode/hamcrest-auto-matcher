@@ -47,7 +47,9 @@ testing {
 javadoc {
     failOnError = true
     options.addBooleanOption('html5', true)
+    // Workaround for https://github.com/gradle/gradle/issues/2354
     options.addStringOption('Xwerror', '-quiet')
+    options.addStringOption('Xdoclint:all', '-quiet')
 }
 
 tasks.withType(JavaCompile) {
