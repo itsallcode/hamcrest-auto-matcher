@@ -1,9 +1,7 @@
-module hamcrest.auto.matcher {
-	exports org.itsallcode.matcher;
+module org.itsallcode.automatcher {
 	exports org.itsallcode.matcher.auto;
-	exports org.itsallcode.matcher.config;
 
-	requires static java.sql;
+	requires java.sql;
 	requires java.logging;
 	requires transitive org.hamcrest;
 }
