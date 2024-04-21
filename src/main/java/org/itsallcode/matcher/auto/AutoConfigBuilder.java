@@ -39,6 +39,9 @@ class AutoConfigBuilder<T> {
 			Temporal.class, Currency.class,
 			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class, URL.class, URI.class)));
 
+	private static final Set<String> IGNORED_METHOD_NAMES = new HashSet<>(
+			asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
+
 	private final T expected;
 	private final Builder<T> configBuilder;
 
@@ -49,7 +52,7 @@ class AutoConfigBuilder<T> {
 
 	private MatcherConfig<T> build() {
 		Arrays.stream(expected.getClass().getMethods()) //
-				.filter(this::isNotBlackListed) //
+				.filter(this::isNotIgnored) //
 				.filter(this::isGetterMethodName) //
 				.filter(this::isGetterMethodSignature) //
 				.sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
@@ -59,7 +62,7 @@ class AutoConfigBuilder<T> {
 		return configBuilder.build();
 	}
 
-	public static <T> Matcher<T> createEqualToMatcher(final T expected) {
+	static <T> Matcher<T> createEqualToMatcher(final T expected) {
 		final Class<? extends Object> type = expected.getClass();
 		if (type.isArray()) {
 			return createArrayMatcher(expected);
@@ -142,10 +145,8 @@ class AutoConfigBuilder<T> {
 		return (Matcher<T>) OptionalMatchers.isPresentAnd(AutoMatcher.equalTo(expectedOptional.get()));
 	}
 
-	private boolean isNotBlackListed(final Method method) {
-		final Set<String> blacklist = new HashSet<>(
-				asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
-		return !blacklist.contains(method.getName());
+	private boolean isNotIgnored(final Method method) {
+		return !IGNORED_METHOD_NAMES.contains(method.getName());
 	}
 
 	private boolean isGetterMethodSignature(final Method method) {

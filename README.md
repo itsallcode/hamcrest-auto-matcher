@@ -26,6 +26,7 @@ Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnos
 ### Setup dependencies
 
 #### Gradle
+
 ```groovy
 repositories {
     mavenCentral()

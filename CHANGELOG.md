@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - unreleased
 
+### Breaking Changes
+
+* Upgrade from `org.hamcrest:hamcrest-all:1.3` to `org.hamcrest:hamcrest:2.2`
+
 ## [0.6.0] - 2024-01-31
 
 ### Breaking Changes
