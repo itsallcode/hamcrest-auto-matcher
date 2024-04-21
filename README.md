@@ -135,6 +135,15 @@ Expected: {id=<4711>, longVal=null, name="name1", attr=null, stringArray=null, c
      but: {longVal was <42L>}
 ```
 
+#### Property Detection
+
+AutoMatcher creates properties for methods matching the following criteria:
+
+* Visibility: `public`
+* Name: starts with `get` or `is`
+* Signature: not `void` and no arguments
+* Not one of the built-in methods `getClass()`, `getProtectionDomain()`, `getClassLoader()`, `getURLs()`
+
 ### Using [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java)
 If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/org/itsallcode/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
 
