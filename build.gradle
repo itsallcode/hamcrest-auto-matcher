@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.hamcrest:hamcrest-all:1.3'
+    implementation 'org.hamcrest:hamcrest:2.2'
 }
 
 group 'org.itsallcode'
@@ -33,6 +33,13 @@ testing {
         test {
             var junitVersion = '5.10.2'
             useJUnitJupiter(junitVersion)
+            targets {
+                all {
+                    testTask.configure {
+                        systemProperty 'java.util.logging.config.file', 'src/test/resources/logging.properties'
+                    }
+                }
+            }
         }
     }
 }

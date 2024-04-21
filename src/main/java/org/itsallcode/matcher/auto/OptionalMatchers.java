@@ -69,7 +69,7 @@ class OptionalMatchers {
      * @return a matcher that matches when the examined {@code Optional} contains a
      *         value that satisfies the specified matcher.
      */
-    public static <T> Matcher<Optional<T>> isPresentAnd(final Matcher<? super T> matcher) {
+    static <T> Matcher<Optional<T>> isPresentAnd(final Matcher<? super T> matcher) {
         return new HasValue<>(matcher);
     }
 

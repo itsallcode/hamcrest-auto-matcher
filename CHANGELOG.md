@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - unreleased
 
+### Breaking Changes
+
+* [#10](https://github.com/itsallcode/hamcrest-auto-matcher/pull/10) Upgrade from `org.hamcrest:hamcrest-all:1.3` to `org.hamcrest:hamcrest:2.2`
+
 ## [0.6.0] - 2024-01-31
 
 ### Breaking Changes
