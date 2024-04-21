@@ -17,7 +17,7 @@ dependencies {
 }
 
 group 'org.itsallcode'
-version = '0.6.0'
+version = '0.7.0'
 
 java {
     toolchain {
@@ -47,11 +47,17 @@ testing {
 javadoc {
     failOnError = true
     options.addBooleanOption('html5', true)
+    // Workaround for https://github.com/gradle/gradle/issues/2354
     options.addStringOption('Xwerror', '-quiet')
+    options.addStringOption('Xdoclint:all', '-quiet')
 }
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:all'
+    // module-info.java:8: warning: requires directive for an automatic module org.hamcrest
+    options.compilerArgs << '-Xlint:-requires-automatic'
+    // module-info.java:8: warning: requires transitive directive for an automatic module org.hamcrest
+    options.compilerArgs << '-Xlint:-requires-transitive-automatic'
     options.compilerArgs << '-Werror'
     options.encoding = 'UTF-8'
 }
