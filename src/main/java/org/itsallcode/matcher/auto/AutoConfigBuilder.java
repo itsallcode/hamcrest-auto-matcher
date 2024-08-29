@@ -17,6 +17,7 @@ import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
@@ -40,17 +41,19 @@ class AutoConfigBuilder<T> {
 			File.class, Path.class, UUID.class, Class.class, Package.class, Enum.class, URL.class, URI.class)));
 
 	private static final Set<String> IGNORED_METHOD_NAMES = new HashSet<>(
-			asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs"));
+			asList("getClass", "getProtectionDomain", "getClassLoader", "getURLs", "hashCode", "toString"));
 
 	private final T expected;
 	private final Builder<T> configBuilder;
+	private final boolean isRecord;
 
-	private AutoConfigBuilder(final T expected) {
+	AutoConfigBuilder(final T expected, final boolean isRecord) {
 		this.expected = expected;
+		this.isRecord = isRecord;
 		this.configBuilder = MatcherConfig.builder(expected);
 	}
 
-	private MatcherConfig<T> build() {
+	MatcherConfig<T> build() {
 		Arrays.stream(expected.getClass().getMethods()) //
 				.filter(this::isNotIgnored) //
 				.filter(this::isGetterMethodName) //
@@ -79,8 +82,29 @@ class AutoConfigBuilder<T> {
 		if (Optional.class.isAssignableFrom(type)) {
 			return createOptionalMatcher(expected);
 		}
-		final MatcherConfig<T> config = new AutoConfigBuilder<>(expected).build();
+		final MatcherConfig<T> config = AutoConfigBuilder.create(expected).build();
 		return new ConfigurableMatcher<>(config);
+	}
+
+	static <T> AutoConfigBuilder<T> create(final T expected) {
+		return new AutoConfigBuilder<>(expected, isRecord(expected.getClass()));
+	}
+
+	private static boolean isRecord(final Class<?> type) {
+		final Method isRecord;
+		try {
+			isRecord = type.getClass().getMethod("isRecord");
+		} catch (NoSuchMethodException | SecurityException e) {
+			LOG.log(Level.FINEST, e,
+					() -> "Method Class.isRecord() does not exist, " + type.getName() + " is probably not a record");
+			return false;
+		}
+		try {
+			return (boolean) isRecord.invoke(type);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOG.log(Level.WARNING, e, () -> "Invocation of " + isRecord + " failed for " + type);
+			return false;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,8 +179,11 @@ class AutoConfigBuilder<T> {
 	}
 
 	private boolean isGetterMethodName(final Method method) {
+		if (isRecord) {
+			return true;
+		}
 		final String methodName = method.getName();
-		return methodName.startsWith("get") //
+		return methodName.startsWith("get")
 				|| methodName.startsWith("is");
 	}
 
