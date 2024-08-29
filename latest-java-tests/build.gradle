@@ -17,8 +17,7 @@ java {
 testing {
     suites {
         test {
-            var junitVersion = '5.10.2'
-            useJUnitJupiter(junitVersion)
+            useJUnitJupiter('5.11.0')
             targets {
                 all {
                     testTask.configure {
