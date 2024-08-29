@@ -3,3 +3,5 @@ plugins {
 }
 
 rootProject.name = 'hamcrest-auto-matcher'
+
+include ':latest-java-tests'
