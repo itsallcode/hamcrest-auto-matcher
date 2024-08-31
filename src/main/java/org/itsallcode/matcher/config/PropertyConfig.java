@@ -22,14 +22,30 @@ public class PropertyConfig<T, P> {
 		this.propertyAccessor = propertyAccessor;
 	}
 
+	/**
+	 * Get the name of the property.
+	 * 
+	 * @return property name
+	 */
 	public String getPropertyName() {
 		return this.propertyName;
 	}
 
+	/**
+	 * Get the matcher that is used to compare the property value.
+	 * 
+	 * @return matcher
+	 */
 	public Matcher<P> getMatcher() {
 		return this.matcher;
 	}
 
+	/**
+	 * Get the property value from the object.
+	 * 
+	 * @param object object to get the property value from
+	 * @return property value
+	 */
 	public P getPropertyValue(final T object) {
 		return this.propertyAccessor.apply(object);
 	}

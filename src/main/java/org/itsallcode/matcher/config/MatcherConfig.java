@@ -8,7 +8,12 @@ import java.util.stream.StreamSupport;
 
 import org.hamcrest.*;
 
-public class MatcherConfig<T> {
+/**
+ * Configuration for a {@link ConfigurableMatcher}.
+ * 
+ * @param <T> type of the object that is handled by the matcher
+ */
+public final class MatcherConfig<T> {
 	private final T expected;
 	private final List<PropertyConfig<T, ?>> propertyConfigs;
 
@@ -21,6 +26,11 @@ public class MatcherConfig<T> {
 		return this.expected;
 	}
 
+	/**
+	 * Get the property configurations.
+	 * 
+	 * @return property configurations
+	 */
 	@SuppressWarnings("unchecked")
 	public List<PropertyConfig<T, Object>> getPropertyConfigs() {
 		return this.propertyConfigs.stream() //
@@ -28,6 +38,13 @@ public class MatcherConfig<T> {
 				.collect(toList());
 	}
 
+	/**
+	 * Create a new {@link Builder} for the given expected model.
+	 * 
+	 * @param <B>      The type of the model to compare.
+	 * @param expected the expected model
+	 * @return new builder
+	 */
 	public static <B> Builder<B> builder(final B expected) {
 		return new Builder<>(expected);
 	}
@@ -37,7 +54,7 @@ public class MatcherConfig<T> {
 	 * 
 	 * @param <B> The type of the model to compare.
 	 */
-	public static class Builder<B> {
+	public static final class Builder<B> {
 		private final B expected;
 		private final List<PropertyConfig<B, ?>> properties = new ArrayList<>();
 

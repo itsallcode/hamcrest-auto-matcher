@@ -22,7 +22,7 @@ version = '0.7.0'
 java {
     toolchain {
         def javaVersion = project.hasProperty('javaVersion') ? project.getProperty('javaVersion') : 11
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(javaVersion)
     }
     withJavadocJar()
     withSourcesJar()

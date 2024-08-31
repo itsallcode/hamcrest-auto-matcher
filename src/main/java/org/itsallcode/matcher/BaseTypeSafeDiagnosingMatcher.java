@@ -10,6 +10,12 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * @param <T> the type supported by the matcher.
  */
 public abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
+
+	/**
+	 * Create a new {@link BaseTypeSafeDiagnosingMatcher} with the expected value.
+	 * 
+	 * @param expected the expected value.
+	 */
 	protected BaseTypeSafeDiagnosingMatcher(final T expected) {
 	}
 

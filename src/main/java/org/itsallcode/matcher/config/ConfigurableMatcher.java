@@ -2,9 +2,20 @@ package org.itsallcode.matcher.config;
 
 import org.itsallcode.matcher.*;
 
+/**
+ * A {@link BaseTypeSafeDiagnosingMatcher} that can be configured with
+ * {@link MatcherConfig}.
+ * 
+ * @param <T> the type supported by the matcher
+ */
 public class ConfigurableMatcher<T> extends BaseTypeSafeDiagnosingMatcher<T> {
 	private final MatcherConfig<T> config;
 
+	/**
+	 * Create a new {@link ConfigurableMatcher} with the given configuration.
+	 * 
+	 * @param config configuration
+	 */
 	public ConfigurableMatcher(final MatcherConfig<T> config) {
 		super(config.getExpected());
 		this.config = config;
