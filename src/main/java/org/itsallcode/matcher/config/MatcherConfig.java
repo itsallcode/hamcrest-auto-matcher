@@ -134,6 +134,10 @@ public class MatcherConfig<T> {
 		 * @return the new {@link MatcherConfig}.
 		 */
 		public MatcherConfig<B> build() {
+			if (this.properties.isEmpty()) {
+				throw new IllegalArgumentException("Failed to build MatcherConfig: Class "
+						+ this.expected.getClass().getName() + " has no properties.");
+			}
 			return new MatcherConfig<>(this.expected, new ArrayList<>(this.properties));
 		}
 	}

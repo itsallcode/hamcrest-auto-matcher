@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 * [#12](https://github.com/itsallcode/hamcrest-auto-matcher/issues/12): Add support for matching Java 17 records
+  * `AutoConfigBuilder` now verifies, that the class has at least one property to avoid succeeding assertions that should fail
   * Upgrade from `org.hamcrest:hamcrest:2.2` to `org.hamcrest:hamcrest:3.0`
 
 ## [0.7.0] - 2024-04-21
