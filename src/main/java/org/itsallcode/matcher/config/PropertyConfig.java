@@ -11,7 +11,7 @@ import org.hamcrest.Matcher;
  * @param <T> type of the object that is handled by the matcher
  * @param <P> type of the object's property
  */
-class PropertyConfig<T, P> {
+public class PropertyConfig<T, P> {
 	private final String propertyName;
 	private final Matcher<P> matcher;
 	private final Function<T, P> propertyAccessor;

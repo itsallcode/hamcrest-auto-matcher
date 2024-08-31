@@ -22,7 +22,7 @@ public class MatcherConfig<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	List<PropertyConfig<T, Object>> getPropertyConfigs() {
+	public List<PropertyConfig<T, Object>> getPropertyConfigs() {
 		return this.propertyConfigs.stream() //
 				.map(c -> (PropertyConfig<T, Object>) c) //
 				.collect(toList());
@@ -134,18 +134,22 @@ public class MatcherConfig<T> {
 		 * @return the new {@link MatcherConfig}.
 		 */
 		public MatcherConfig<B> build() {
+			if (this.properties.isEmpty()) {
+				throw new IllegalArgumentException("Failed to build MatcherConfig: Class "
+						+ this.expected.getClass().getName() + " has no properties.");
+			}
 			return new MatcherConfig<>(this.expected, new ArrayList<>(this.properties));
 		}
 	}
 
 	private static class NullIterableMatcher<T> extends BaseMatcher<Iterable<T>> {
 		@Override
-		public boolean matches(Object item) {
+		public boolean matches(final Object item) {
 			return item == null;
 		}
 
 		@Override
-		public void describeTo(Description description) {
+		public void describeTo(final Description description) {
 			description.appendText("null");
 		}
 	}

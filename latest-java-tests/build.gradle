@@ -1,0 +1,34 @@
+plugins {
+    id "java-library"
+    id "org.sonarqube" version "5.1.0.4882"
+    id "com.github.ben-manes.versions" version "0.51.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter('5.11.0')
+            targets {
+                all {
+                    testTask.configure {
+                        systemProperty 'java.util.logging.config.file', 'src/test/resources/logging.properties'
+                    }
+                }
+            }
+            dependencies {
+                implementation 'org.hamcrest:hamcrest:3.0'
+                implementation project(':')
+            }
+        }
+    }
+}
