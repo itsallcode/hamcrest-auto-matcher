@@ -8,12 +8,12 @@ plugins {
     id "com.github.ben-manes.versions" version "0.51.0"
 }
 
+group 'org.itsallcode'
+version = '0.8.0'
+
 dependencies {
     api 'org.hamcrest:hamcrest:3.0'
 }
-
-group 'org.itsallcode'
-version = '0.8.0'
 
 java {
     toolchain {
@@ -58,6 +58,7 @@ tasks.withType(JavaCompile) {
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
         xml.required = true
     }
@@ -110,33 +111,20 @@ publishing {
             }
         }
     }
-
-    repositories {
-        maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            allowInsecureProtocol = false
-            credentials(PasswordCredentials) {
-                username = getOptionalProperty("ossrhUsername")
-                password = getOptionalProperty("ossrhPassword")
-            }
-        }
-    }
 }
 
 signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
 }
-
 
 nexusPublishing {
     packageGroup = project.group
     repositories {
         sonatype {
             stagingProfileId = "546ea6ce74787e"
-            username = getOptionalProperty("ossrhUsername")
-            password = getOptionalProperty("ossrhPassword")
         }
     }
 }
