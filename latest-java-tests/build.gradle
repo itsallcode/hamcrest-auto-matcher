@@ -6,7 +6,8 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        def rootProjectJavaVersion = rootProject.java.toolchain.languageVersion.get().asInt()
+        languageVersion = JavaLanguageVersion.of(Math.max(21, rootProjectJavaVersion))
     }
 }
 
