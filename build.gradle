@@ -8,12 +8,8 @@ plugins {
     id "com.github.ben-manes.versions" version "0.51.0"
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation 'org.hamcrest:hamcrest:3.0'
+    api 'org.hamcrest:hamcrest:3.0'
 }
 
 group 'org.itsallcode'
@@ -31,7 +27,7 @@ java {
 testing {
     suites {
         test {
-            useJUnitJupiter('5.11.0')
+            useJUnitJupiter()
             targets {
                 all {
                     testTask.configure {
