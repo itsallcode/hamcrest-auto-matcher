@@ -8,41 +8,41 @@ import org.hamcrest.*;
  * {@link org.hamcrest.TypeSafeDiagnosingMatcher#describeTo(Description)}.
  */
 public final class DescriptionBuilder {
-	private final Description description;
-	private boolean firstElement = true;
+    private final Description description;
+    private boolean firstElement = true;
 
-	private DescriptionBuilder(final Description description) {
-		this.description = description;
-	}
+    private DescriptionBuilder(final Description description) {
+        this.description = description;
+    }
 
-	static DescriptionBuilder start(final Description description) {
-		description.appendText("{");
-		return new DescriptionBuilder(description);
-	}
+    static DescriptionBuilder start(final Description description) {
+        description.appendText("{");
+        return new DescriptionBuilder(description);
+    }
 
-	/**
-	 * Append a message and a matcher to the description.
-	 * 
-	 * @param message message to append
-	 * @param matcher matcher to append
-	 * @return {@code this} for method chaining
-	 */
-	public DescriptionBuilder append(final String message, final SelfDescribing matcher) {
-		appendComma();
-		this.description.appendText(message) //
-				.appendText("=") //
-				.appendDescriptionOf(matcher);
-		return this;
-	}
+    /**
+     * Append a message and a matcher to the description.
+     * 
+     * @param message message to append
+     * @param matcher matcher to append
+     * @return {@code this} for method chaining
+     */
+    public DescriptionBuilder append(final String message, final SelfDescribing matcher) {
+        appendComma();
+        this.description.appendText(message) //
+                .appendText("=") //
+                .appendDescriptionOf(matcher);
+        return this;
+    }
 
-	private void appendComma() {
-		if (!this.firstElement) {
-			this.description.appendText(", ");
-		}
-		this.firstElement = false;
-	}
+    private void appendComma() {
+        if (!this.firstElement) {
+            this.description.appendText(", ");
+        }
+        this.firstElement = false;
+    }
 
-	void close() {
-		this.description.appendText("}");
-	}
+    void close() {
+        this.description.appendText("}");
+    }
 }

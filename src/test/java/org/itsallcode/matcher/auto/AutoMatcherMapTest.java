@@ -13,54 +13,54 @@ import org.junit.jupiter.api.Test;
 
 class AutoMatcherMapTest {
 
-	@Test
-	void testEmptyMap() {
-		assertValuesDoNotMatch(emptyMap(), singletonMap("key2", "value2"));
-	}
+    @Test
+    void testEmptyMap() {
+        assertValuesDoNotMatch(emptyMap(), singletonMap("key2", "value2"));
+    }
 
-	@Test
-	void testEmptyMapAndNewHashMap() {
-		assertValuesMatch(new HashMap<>(), emptyMap());
-	}
+    @Test
+    void testEmptyMapAndNewHashMap() {
+        assertValuesMatch(new HashMap<>(), emptyMap());
+    }
 
-	@Test
-	void testEmptyMapAndNewTreeMap() {
-		assertValuesMatch(new TreeMap<>(), emptyMap());
-	}
+    @Test
+    void testEmptyMapAndNewTreeMap() {
+        assertValuesMatch(new TreeMap<>(), emptyMap());
+    }
 
-	@Test
-	void testSingletonMap() {
-		assertValuesDoNotMatch(singletonMap("key1", "value1"), singletonMap("key2", "value2"));
-	}
+    @Test
+    void testSingletonMap() {
+        assertValuesDoNotMatch(singletonMap("key1", "value1"), singletonMap("key2", "value2"));
+    }
 
-	@Test
-	void testSingletonMapAndEmptyMap() {
-		assertValuesDoNotMatch(singletonMap("key1", "value1"), emptyMap());
-	}
+    @Test
+    void testSingletonMapAndEmptyMap() {
+        assertValuesDoNotMatch(singletonMap("key1", "value1"), emptyMap());
+    }
 
-	@Test
-	void testSingletonMapAndNewHashMap() {
-		assertValuesDoNotMatch(singletonMap("key1", "value1"), new HashMap<>());
-	}
+    @Test
+    void testSingletonMapAndNewHashMap() {
+        assertValuesDoNotMatch(singletonMap("key1", "value1"), new HashMap<>());
+    }
 
-	@Test
-	void testIncompatibleTypesClassNotPublic() {
-		final List<String> actual = singletonList("value1");
-		final Matcher<Object> matcher = AutoMatcher.equalTo(singletonMap("key", "value"));
-		assertThrows(ClassCastException.class, () -> assertThat(actual, matcher));
-	}
+    @Test
+    void testIncompatibleTypesClassNotPublic() {
+        final List<String> actual = singletonList("value1");
+        final Matcher<Object> matcher = AutoMatcher.equalTo(singletonMap("key", "value"));
+        assertThrows(ClassCastException.class, () -> assertThat(actual, matcher));
+    }
 
-	@Test
-	void testAutoMatcherWorksForSingletonMapAndNewHashMapWith1Entry() {
-		final HashMap<Object, Object> map = new HashMap<>();
-		map.put("key1", "value1");
-		assertValuesMatch(singletonMap("key1", "value1"), map);
-	}
+    @Test
+    void testAutoMatcherWorksForSingletonMapAndNewHashMapWith1Entry() {
+        final HashMap<Object, Object> map = new HashMap<>();
+        map.put("key1", "value1");
+        assertValuesMatch(singletonMap("key1", "value1"), map);
+    }
 
-	@Test
-	void testSingletonMapAndNewHashMapWith1Entry() {
-		final HashMap<Object, Object> map = new HashMap<>();
-		map.put("key1", "value1");
-		assertValuesMatch(singletonMap("key1", "value1"), map);
-	}
+    @Test
+    void testSingletonMapAndNewHashMapWith1Entry() {
+        final HashMap<Object, Object> map = new HashMap<>();
+        map.put("key1", "value1");
+        assertValuesMatch(singletonMap("key1", "value1"), map);
+    }
 }
