@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * `AutoConfigBuilder` now verifies, that the class has at least one property to avoid succeeding assertions that should fail
   * Upgrade from `org.hamcrest:hamcrest:2.2` to `org.hamcrest:hamcrest:3.0`
 * [#14](https://github.com/itsallcode/hamcrest-auto-matcher/pull/14): Fix build with Java 21
+* [#15](https://github.com/itsallcode/hamcrest-auto-matcher/pull/15): Format sources
+* [#16](https://github.com/itsallcode/hamcrest-auto-matcher/pull/16): Automate release process
 
 ## [0.7.0] - 2024-04-21
 
