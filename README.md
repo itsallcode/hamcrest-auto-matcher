@@ -7,10 +7,10 @@ Automatic hamcrest matcher for model classes for Java 11
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Ahamcrest-auto-matcher&metric=coverage)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Ahamcrest-auto-matcher)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/hamcrest-auto-matcher)](https://search.maven.org/artifact/org.itsallcode/hamcrest-auto-matcher)
 
-## Why use hamcrest-auto-matcher?
+## Why use `hamcrest-auto-matcher`?
 
-Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnosingMatcher`](http://hamcrest.org/JavaHamcrest/javadoc/1.3/org/hamcrest/TypeSafeDiagnosingMatcher.html) is a good idea, because it gives you a readable diff of actual and expected property values. But doing it by hand is tedious and hard to get right, especially for classes with many properties:
-* It is easy to make mistakes in the [`matches()`](http://hamcrest.org/JavaHamcrest/javadoc/1.3/org/hamcrest/TypeSafeDiagnosingMatcher.html#matches%28java.lang.Object%29) method.
+Writing a Hamcrest matcher for your model classes by extending [`TypeSafeDiagnosingMatcher`](https://hamcrest.org/JavaHamcrest/javadoc/3.0/org/hamcrest/TypeSafeDiagnosingMatcher.html) is a good idea, because it gives you a readable diff of actual and expected property values. But doing it by hand is tedious and hard to get right, especially for classes with many properties:
+* It is easy to make mistakes in the [`matches()`](https://hamcrest.org/JavaHamcrest/javadoc/3.0/org/hamcrest/TypeSafeDiagnosingMatcher.html#matches%28java.lang.Object%29) method.
 * It requires lot's of boiler plate code.
 * Good layout of actual and expected property values is hard to get right.
 * Each property occurs in multiple places which violates the [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) principle.
@@ -20,8 +20,9 @@ Writing a hamcrest matcher for your model classes by extending [`TypeSafeDiagnos
 * [Changelog](CHANGELOG.md)
 * Requirements
   * Java 11
+  * Hamcrest 3.0
 
-## How to use hamcrest-auto-matcher in your project
+## How to use `hamcrest-auto-matcher` in your project
 
 ### Setup dependencies
 
@@ -33,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'org.itsallcode:hamcrest-auto-matcher:0.8.0'
+    testImplementation 'org.itsallcode:hamcrest-auto-matcher:0.8.0'
 }
 ```
 
@@ -122,7 +123,7 @@ public class DemoAttribute {
 Use [`AutoMatcher.equalTo()`](src/main/java/org/itsallcode/matcher/auto/AutoMatcher.java) to create a matcher for your expected model instance. This will use reflection to determine expected property values based on getter methods:
 
 ```java
-org.itsallcode.matcher.auto.AutoMatcher;
+import org.itsallcode.matcher.auto.AutoMatcher;
 
 DemoModel expected = ...;
 DemoModel actual = ...;
@@ -148,6 +149,9 @@ AutoMatcher creates properties for methods matching the following criteria:
 If `AutoMatcher` does not work for your model classes, you can still use [`ConfigurableMatcher`](src/main/java/org/itsallcode/matcher/config/ConfigurableMatcher.java) and [`MatcherConfig`](src/main/java/org/itsallcode/matcher/config/MatcherConfig.java) which allows you to specify properties and custom matchers explicitly but is much easier to use than `TypeSafeDiagnosingMatcher`.
 
 ```java
+import org.itsallcode.matcher.config.MatcherConfig;
+import org.itsallcode.matcher.config.ConfigurableMatcher;
+
 public class DemoModelMatcher {
     public static Matcher<DemoModel> equalTo(DemoModel expected) {
         final MatcherConfig<DemoModel> config = MatcherConfig.builder(expected)
@@ -200,29 +204,18 @@ open build/reports/jacoco/test/html/index.html
 
 ### Publish to Maven Central
 
-1. Add the following to your `~/.gradle/gradle.properties`:
+#### Preparations
 
-    ```properties
-    ossrhUsername=<your maven central username>
-    ossrhPassword=<your maven central passwort>
+1. Checkout the `main` branch, create a new branch.
+2. Update version number in `build.gradle` and `README.md`.
+3. Add changes in new version to `CHANGELOG.md`.
+4. Commit and push changes.
+5. Create a new pull request, have it reviewed and merged to `main`.
 
-    signing.keyId=<gpg key id (last 8 chars)>
-    signing.password=<gpg key password>
-    signing.secretKeyRingFile=<path to secret keyring file>
-    ```
+#### Perform the Release
 
-2. Increment version number in `build.gradle` and `README.md`, update `CHANGELOG.md`, commit and push.
-3. Optional: run the following command to do a dry-run:
-
-    ```sh
-    ./gradlew clean check build publishToSonatype closeSonatypeStagingRepository --info
-    ```
-
-4. Run the following command to publish to Maven Central:
-
-    ```sh
-    ./gradlew clean check build publishToSonatype closeAndReleaseSonatypeStagingRepository --info
-    ```
-
-5. Create a new [release](https://github.com/itsallcode/hamcrest-auto-matcher/releases) on GitHub.
-6. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
+1. Start the release workflow
+  * Run command `gh workflow run release.yml --repo itsallcode/hamcrest-auto-matcher --ref main`
+  * or go to [GitHub Actions](https://github.com/itsallcode/hamcrest-auto-matcher/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
+2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/hamcrest-auto-matcher/releases).
+3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/hamcrest-auto-matcher/).
