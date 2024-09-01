@@ -9,8 +9,8 @@ import org.itsallcode.matcher.auto.AutoMatcher;
  * Unit test for {@link AutoMatcher} using {@link DemoModel}
  */
 class AutoDemoModelMatcherTest extends DemoModelMatcherTest {
-	@Override
-	protected Function<DemoModel, Matcher<DemoModel>> createNewSUT() {
-		return AutoMatcher::equalTo;
-	}
+    @Override
+    protected Function<DemoModel, Matcher<DemoModel>> createNewSUT() {
+        return AutoMatcher::equalTo;
+    }
 }

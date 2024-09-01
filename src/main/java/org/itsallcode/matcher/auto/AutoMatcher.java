@@ -16,60 +16,60 @@ import org.itsallcode.matcher.config.ConfigurableMatcher;
  */
 public final class AutoMatcher {
 
-	private AutoMatcher() {
-		// not instantiable
-	}
+    private AutoMatcher() {
+        // not instantiable
+    }
 
-	/**
-	 * Creates a matcher that matches the expected object.
-	 * 
-	 * @param <T>      type of the expected object
-	 * @param expected expected object
-	 * @return a matcher that matches the expected object
-	 */
-	public static <T> Matcher<T> equalTo(final T expected) {
-		return AutoConfigBuilder.createEqualToMatcher(expected);
-	}
+    /**
+     * Creates a matcher that matches the expected object.
+     * 
+     * @param <T>      type of the expected object
+     * @param expected expected object
+     * @return a matcher that matches the expected object
+     */
+    public static <T> Matcher<T> equalTo(final T expected) {
+        return AutoConfigBuilder.createEqualToMatcher(expected);
+    }
 
-	/**
-	 * Creates a matcher that matches an iterable containing the expected elements
-	 * in the same order.
-	 * 
-	 * @param <T>      type of the elements in the iterable
-	 * @param expected expected elements
-	 * @return a matcher that matches an iterable containing the expected elements
-	 *         in the same order
-	 */
-	@SafeVarargs
-	@SuppressWarnings({ "java:S1452", "java:S923", "varargs" }) // Wildcard type required here
-	public static <T> Matcher<Iterable<? extends T>> contains(final T... expected) {
-		if (expected.length == 0) {
-			return emptyIterable();
-		}
-		return Matchers.contains(getMatchers(expected));
-	}
+    /**
+     * Creates a matcher that matches an iterable containing the expected elements
+     * in the same order.
+     * 
+     * @param <T>      type of the elements in the iterable
+     * @param expected expected elements
+     * @return a matcher that matches an iterable containing the expected elements
+     *         in the same order
+     */
+    @SafeVarargs
+    @SuppressWarnings({ "java:S1452", "java:S923", "varargs" }) // Wildcard type required here
+    public static <T> Matcher<Iterable<? extends T>> contains(final T... expected) {
+        if (expected.length == 0) {
+            return emptyIterable();
+        }
+        return Matchers.contains(getMatchers(expected));
+    }
 
-	/**
-	 * Creates a matcher that matches an iterable containing the expected elements
-	 * in any order.
-	 * 
-	 * @param <T>      type of the elements in the iterable
-	 * @param expected expected elements
-	 * @return a matcher that matches an iterable containing the expected elements
-	 *         in any order
-	 */
-	@SafeVarargs
-	@SuppressWarnings({ "java:S1452", "java:S923", "varargs" }) // Wildcard type required here
-	public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(final T... expected) {
-		if (expected.length == 0) {
-			return emptyIterable();
-		}
-		return Matchers.containsInAnyOrder(getMatchers(expected));
-	}
+    /**
+     * Creates a matcher that matches an iterable containing the expected elements
+     * in any order.
+     * 
+     * @param <T>      type of the elements in the iterable
+     * @param expected expected elements
+     * @return a matcher that matches an iterable containing the expected elements
+     *         in any order
+     */
+    @SafeVarargs
+    @SuppressWarnings({ "java:S1452", "java:S923", "varargs" }) // Wildcard type required here
+    public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(final T... expected) {
+        if (expected.length == 0) {
+            return emptyIterable();
+        }
+        return Matchers.containsInAnyOrder(getMatchers(expected));
+    }
 
-	private static <T> List<Matcher<? super T>> getMatchers(final T[] expected) {
-		return Arrays.stream(expected) //
-				.map(AutoMatcher::equalTo) //
-				.collect(toList());
-	}
+    private static <T> List<Matcher<? super T>> getMatchers(final T[] expected) {
+        return Arrays.stream(expected) //
+                .map(AutoMatcher::equalTo) //
+                .collect(toList());
+    }
 }

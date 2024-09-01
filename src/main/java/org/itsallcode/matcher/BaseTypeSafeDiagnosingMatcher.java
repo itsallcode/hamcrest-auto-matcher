@@ -11,40 +11,40 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  */
 public abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
-	/**
-	 * Create a new {@link BaseTypeSafeDiagnosingMatcher} with the expected value.
-	 * 
-	 * @param expected the expected value.
-	 */
-	protected BaseTypeSafeDiagnosingMatcher(final T expected) {
-	}
+    /**
+     * Create a new {@link BaseTypeSafeDiagnosingMatcher} with the expected value.
+     * 
+     * @param expected the expected value.
+     */
+    protected BaseTypeSafeDiagnosingMatcher(final T expected) {
+    }
 
-	@Override
-	public final void describeTo(final Description description) {
-		final DescriptionBuilder builder = DescriptionBuilder.start(description);
-		describeTo(builder);
-		builder.close();
-	}
+    @Override
+    public final void describeTo(final Description description) {
+        final DescriptionBuilder builder = DescriptionBuilder.start(description);
+        describeTo(builder);
+        builder.close();
+    }
 
-	/**
-	 * Describe the expected value using the {@link DescriptionBuilder}.
-	 *
-	 * @param description the {@link DescriptionBuilder}.
-	 */
-	protected abstract void describeTo(DescriptionBuilder description);
+    /**
+     * Describe the expected value using the {@link DescriptionBuilder}.
+     *
+     * @param description the {@link DescriptionBuilder}.
+     */
+    protected abstract void describeTo(DescriptionBuilder description);
 
-	@Override
-	protected final boolean matchesSafely(final T actual, final Description mismatchDescription) {
-		final MismatchReporter mismatchReporter = MismatchReporter.start(mismatchDescription);
-		reportMismatches(actual, mismatchReporter);
-		return mismatchReporter.finishAndCheckMatching();
-	}
+    @Override
+    protected final boolean matchesSafely(final T actual, final Description mismatchDescription) {
+        final MismatchReporter mismatchReporter = MismatchReporter.start(mismatchDescription);
+        reportMismatches(actual, mismatchReporter);
+        return mismatchReporter.finishAndCheckMatching();
+    }
 
-	/**
-	 * Report mismatches to the given {@link MismatchReporter}.
-	 *
-	 * @param actual           the actual value to compare to the expected value.
-	 * @param mismatchReporter the {@link MismatchReporter}.
-	 */
-	protected abstract void reportMismatches(T actual, MismatchReporter mismatchReporter);
+    /**
+     * Report mismatches to the given {@link MismatchReporter}.
+     *
+     * @param actual           the actual value to compare to the expected value.
+     * @param mismatchReporter the {@link MismatchReporter}.
+     */
+    protected abstract void reportMismatches(T actual, MismatchReporter mismatchReporter);
 }
