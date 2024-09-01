@@ -73,14 +73,6 @@ sonarqube {
     }
 }
 
-def getOptionalProperty(String name) {
-    if(project.hasProperty(name)) {
-        return project.property(name)
-    }
-    logger.info("Project property '${name}' not available. Please it to ~/.gradle/gradle.properties")
-    return null
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
