@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.0] - unreleased
+## [0.9.0] - unreleased
+
+## [0.8.0] - 2024-09-01
 
 ### Changes
 * [#12](https://github.com/itsallcode/hamcrest-auto-matcher/issues/12): Add support for matching Java 17 records
   * `AutoConfigBuilder` now verifies, that the class has at least one property to avoid succeeding assertions that should fail
   * Upgrade from `org.hamcrest:hamcrest:2.2` to `org.hamcrest:hamcrest:3.0`
 * [#14](https://github.com/itsallcode/hamcrest-auto-matcher/pull/14): Fix build with Java 21
+* [#15](https://github.com/itsallcode/hamcrest-auto-matcher/pull/15): Format sources
+* [#16](https://github.com/itsallcode/hamcrest-auto-matcher/pull/16): Automate release process
 
 ## [0.7.0] - 2024-04-21
 
