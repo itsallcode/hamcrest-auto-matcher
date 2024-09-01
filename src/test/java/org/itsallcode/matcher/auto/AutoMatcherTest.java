@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
@@ -276,7 +277,7 @@ class AutoMatcherTest {
 
 	@Test
 	void testAutoMatcherWorksForSimpleTypeUrl() throws MalformedURLException {
-		assertValuesDoNotMatch(new URL("http://example.com"), new URL("http://example.com/test"));
+		assertValuesDoNotMatch(URI.create("http://example.com").toURL(), URI.create("http://example.com/test").toURL());
 	}
 
 	@Test

@@ -8,21 +8,17 @@ plugins {
     id "com.github.ben-manes.versions" version "0.51.0"
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation 'org.hamcrest:hamcrest:3.0'
+    api 'org.hamcrest:hamcrest:3.0'
 }
 
 group 'org.itsallcode'
-version = '0.7.0'
+version = '0.8.0'
 
 java {
     toolchain {
         def javaVersion = project.hasProperty('javaVersion') ? project.getProperty('javaVersion') : 11
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(javaVersion)
     }
     withJavadocJar()
     withSourcesJar()
@@ -31,7 +27,7 @@ java {
 testing {
     suites {
         test {
-            useJUnitJupiter('5.11.0')
+            useJUnitJupiter()
             targets {
                 all {
                     testTask.configure {

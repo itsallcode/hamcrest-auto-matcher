@@ -1,5 +1,6 @@
 /.gradle/
 /.settings/org.eclipse.buildship.core.prefs
+/latest-java-tests/.settings/org.eclipse.buildship.core.prefs
 .project
 .classpath
 bin/
