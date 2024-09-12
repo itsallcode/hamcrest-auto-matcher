@@ -22,11 +22,6 @@ public abstract class MatcherTestBase<T> {
     protected abstract Function<T, Matcher<T>> createNewSUT();
 
     @Test
-    void testNullObject() {
-        assertThrows(NullPointerException.class, () -> createMatcher(null));
-    }
-
-    @Test
     void subjectUnderTestMustBeNotNull() {
         assertNotNull(createNewSUT());
     }

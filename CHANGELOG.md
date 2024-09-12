@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.0] - unreleased
 
+## [0.8.1] - 2024-09-12
+
+* [#17](https://github.com/itsallcode/hamcrest-auto-matcher/pull/17): Allow using `null` as expected value
+
 ## [0.8.0] - 2024-09-01
 
 ### Changes

@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.itsallcode:hamcrest-auto-matcher:0.8.0'
+    testImplementation 'org.itsallcode:hamcrest-auto-matcher:0.8.1'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
     <groupId>org.itsallcode</groupId>
     <artifactId>hamcrest-auto-matcher</artifactId>
-    <version>0.8.0</version>
+    <version>0.8.1</version>
     <scope>test</scope>
 </dependency>
 ```
