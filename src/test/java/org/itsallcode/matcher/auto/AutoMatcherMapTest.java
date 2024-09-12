@@ -34,6 +34,10 @@ class AutoMatcherMapTest {
     }
 
     @Test
+    void testSingletonMapAndEmptyMapOf() {
+        assertValuesDoNotMatch(singletonMap("key1", "value1"), Map.of());
+    }
+    @Test
     void testSingletonMapAndEmptyMap() {
         assertValuesDoNotMatch(singletonMap("key1", "value1"), emptyMap());
     }
@@ -41,6 +45,11 @@ class AutoMatcherMapTest {
     @Test
     void testSingletonMapAndNewHashMap() {
         assertValuesDoNotMatch(singletonMap("key1", "value1"), new HashMap<>());
+    }
+
+    @Test
+    void testMapWithNullEntry() {
+        assertValuesDoNotMatch(singletonMap("key1", null), new HashMap<>());
     }
 
     @Test
@@ -58,9 +67,16 @@ class AutoMatcherMapTest {
     }
 
     @Test
+    void testHashMapWithNullEntry() {
+        final HashMap<Object, Object> map = new HashMap<>();
+        map.put("key1", null);
+        assertValuesMatch(singletonMap("key1", null), map);
+    }
+
+    @Test
     void testSingletonMapAndNewHashMapWith1Entry() {
         final HashMap<Object, Object> map = new HashMap<>();
         map.put("key1", "value1");
-        assertValuesMatch(singletonMap("key1", "value1"), map);
+        assertValuesMatch(Map.of("key1", "value1"), map);
     }
 }
