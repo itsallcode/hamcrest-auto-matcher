@@ -98,6 +98,16 @@ class AutoMatcherArrayTest {
     }
 
     @Test
+    void testObjectArrayEmpty() {
+        assertValuesDoNotMatch(new Object[] { "a" }, new Object[0]);
+    }
+
+    @Test
+    void testObjectArrayMixed() {
+        assertValuesDoNotMatch(new Object[] { "a", null, 1 }, new Object[0]);
+    }
+
+    @Test
     void testComplexObjectArrayMatch() {
         assertValuesMatch(new ArrayElement[] { new ArrayElement(1, "a") },
                 new ArrayElement[] { new ArrayElement(1, "a") });

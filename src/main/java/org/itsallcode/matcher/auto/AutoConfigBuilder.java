@@ -65,7 +65,11 @@ class AutoConfigBuilder<T> {
         return configBuilder.build();
     }
 
+    @SuppressWarnings("unchecked")
     static <T> Matcher<T> createEqualToMatcher(final T expected) {
+        if (expected == null) {
+            return (Matcher<T>) Matchers.nullValue();
+        }
         final Class<? extends Object> type = expected.getClass();
         if (type.isArray()) {
             return createArrayMatcher(expected);

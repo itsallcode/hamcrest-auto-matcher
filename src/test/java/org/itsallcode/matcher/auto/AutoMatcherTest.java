@@ -42,6 +42,16 @@ class AutoMatcherTest {
     }
 
     @Test
+    void testNull() {
+        assertThat(null, AutoMatcher.equalTo(null));
+    }
+
+    @Test
+    void testNotNull() {
+        assertThat("null", not(AutoMatcher.equalTo(null)));
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     void testIncompatibleTypes() {
         final Matcher<?> matcher = (Matcher<?>) AutoMatcher.equalTo(value1);
@@ -79,11 +89,6 @@ class AutoMatcherTest {
     @Test
     void testEqualToNotEqual() {
         assertThat(value1, not(AutoMatcher.equalTo(value2)));
-    }
-
-    @Test
-    void testEqualToNullThrowsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> AutoMatcher.equalTo(null));
     }
 
     @Test
