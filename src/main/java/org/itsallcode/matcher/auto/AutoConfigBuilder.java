@@ -159,6 +159,11 @@ class AutoConfigBuilder<T> {
         final Object[] elements = StreamSupport.stream(expectedIterable //
                 .spliterator(), false) //
                 .toArray();
+        if (expected instanceof Set) {
+            @SuppressWarnings("unchecked")
+            final Matcher<T> matcher = (Matcher<T>) AutoMatcher.containsInAnyOrder(elements);
+            return matcher;
+        }
         @SuppressWarnings("unchecked")
         final Matcher<T> matcher = (Matcher<T>) AutoMatcher.contains(elements);
         return matcher;
