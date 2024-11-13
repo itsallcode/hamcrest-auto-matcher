@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.0] - unreleased
 
+## [0.8.2] - 2024-11-13
+
+* [#18](https://github.com/itsallcode/hamcrest-auto-matcher/issues/18): Ignore order for Sets
+
 ## [0.8.1] - 2024-09-12
 
 * [#17](https://github.com/itsallcode/hamcrest-auto-matcher/pull/17): Allow using `null` as expected value

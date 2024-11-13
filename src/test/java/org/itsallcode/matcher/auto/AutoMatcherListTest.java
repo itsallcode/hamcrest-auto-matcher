@@ -44,7 +44,7 @@ class AutoMatcherListTest {
     }
 
     @Test
-    void testEmptyListAndAsListAreEqaul() {
+    void testEmptyListAndAsListAreEqual() {
         assertValuesMatch(emptyList(), asList());
     }
 
