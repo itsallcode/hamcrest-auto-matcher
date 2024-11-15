@@ -42,12 +42,21 @@ class AutoMatcherSetTest {
         assertValuesMatch(emptySet(), Set.of());
     }
 
-    @RepeatedTest(name = "ignores set order repetition {currentRepetition} of {totalRepetitions}", value = 50)
+    @RepeatedTest(name = "ignores set order repetition {currentRepetition} of {totalRepetitions}", value = 20)
     void ignoresSetOrder() {
-
+        final long value = System.nanoTime();
+        final String value1 = "value" + value;
+        final String value2 = "value2" + (value + 1);
         final Set<String> set = new HashSet<>();
-        set.add("value1");
-        set.add("value2");
-        assertValuesMatch(Set.of("value1", "value2"), set);
+        set.add(value1);
+        set.add(value2);
+        assertValuesMatch(Set.of(value1, value2), set);
+    }
+
+    @Test
+    void ignoresSetOrderForLinkedHashSet() {
+        final Set<String> set1 = new LinkedHashSet<>(List.of("a", "b"));
+        final Set<String> set2 = new LinkedHashSet<>(List.of("b", "a"));
+        assertValuesMatch(set1, set2);
     }
 }

@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
  * does not match, the overall state is 'not matching'. Additionally it builds a
  * description of the mismatch.
  */
-public class MismatchReporter {
+public final class MismatchReporter {
     private final Description mismatchDescription;
     private boolean firstMismatch = true;
     private boolean matches = true;

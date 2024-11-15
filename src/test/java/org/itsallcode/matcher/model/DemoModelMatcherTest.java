@@ -26,11 +26,12 @@ abstract class DemoModelMatcherTest extends MatcherTestBase<DemoModel> {
     static final String ATTR2 = "attrValue2";
     static final String ATTR3 = "attrValue3";
 
-    static String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1
+    static final String SIMPLE_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1
             + "\", attr=null, children=null, stringArray=null}";
     static final String CHILD1 = "{id=<" + ID2 + ">, longVal=null, name=\"" + NAME2 + "\", attr={value=\"" + ATTR2
             + "\"}, children=an empty iterable, stringArray=null}";
-    static String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1 + "\", attr={value=\""
+    static final String COMPLEX_MODEL_DESCRIPTION = "{id=<" + ID1 + ">, longVal=null, name=\"" + NAME1
+            + "\", attr={value=\""
             + ATTR1 + "\"}, children=iterable containing [" + CHILD1 + "], stringArray=null}";
 
     @Test

@@ -55,11 +55,11 @@ class AutoConfigBuilder<T> {
 
     MatcherConfig<T> build() {
         Arrays.stream(expected.getClass().getMethods()) //
-                .filter(this::isNotIgnored) //
+                .filter(AutoConfigBuilder::isNotIgnored) //
                 .filter(this::isGetterMethodName) //
-                .filter(this::isGetterMethodSignature) //
+                .filter(AutoConfigBuilder::isGetterMethodSignature) //
                 .sorted(Comparator.comparing(this::hasSimpleReturnType).reversed() //
-                        .thenComparing(this::hasArrayReturnType) //
+                        .thenComparing(AutoConfigBuilder::hasArrayReturnType) //
                         .thenComparing(Method::getName)) //
                 .forEach(this::addConfigForGetter);
         return configBuilder.build();
@@ -178,11 +178,11 @@ class AutoConfigBuilder<T> {
         return (Matcher<T>) OptionalMatchers.isPresentAnd(AutoMatcher.equalTo(expectedOptional.get()));
     }
 
-    private boolean isNotIgnored(final Method method) {
+    private static boolean isNotIgnored(final Method method) {
         return !IGNORED_METHOD_NAMES.contains(method.getName());
     }
 
-    private boolean isGetterMethodSignature(final Method method) {
+    private static boolean isGetterMethodSignature(final Method method) {
         return method.getParameterCount() == 0 //
                 && !method.getReturnType().equals(Void.TYPE);
     }
@@ -202,7 +202,7 @@ class AutoConfigBuilder<T> {
         configBuilder.addProperty(propertyName, createGetter(method), AutoMatcher::equalTo);
     }
 
-    private boolean hasArrayReturnType(final Method method) {
+    private static boolean hasArrayReturnType(final Method method) {
         return method.getReturnType().isArray();
     }
 
