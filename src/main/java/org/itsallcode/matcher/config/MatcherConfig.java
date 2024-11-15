@@ -120,7 +120,8 @@ public final class MatcherConfig<T> {
             return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
         }
 
-        private <P> Matcher<Iterable<? extends P>> createListMatcher(final Function<P, Matcher<P>> matcherBuilder,
+        private static <P> Matcher<Iterable<? extends P>> createListMatcher(
+                final Function<P, Matcher<P>> matcherBuilder,
                 final Iterable<? extends P> expectedPropertyValue) {
             if (expectedPropertyValue == null) {
                 return createNullIterableMatcher();
@@ -135,7 +136,7 @@ public final class MatcherConfig<T> {
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        private <P> Matcher<Iterable<? extends P>> createNullIterableMatcher() {
+        private static <P> Matcher<Iterable<? extends P>> createNullIterableMatcher() {
             return new NullIterableMatcher();
         }
 

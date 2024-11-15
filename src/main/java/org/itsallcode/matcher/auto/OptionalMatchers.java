@@ -18,7 +18,10 @@ import org.hamcrest.*;
  * 
  * @author npathai, sweiler
  */
-class OptionalMatchers {
+final class OptionalMatchers {
+    // This is an utility class that must not be instantiated.
+    private OptionalMatchers() {
+    }
 
     /**
      * Creates a matcher that matches when the examined {@code Optional} contains no
@@ -100,9 +103,5 @@ class OptionalMatchers {
                 mismatchDescription.appendText("was <Empty>");
             }
         }
-    }
-
-    // This is an utility class that must not be instantiated.
-    private OptionalMatchers() {
     }
 }
