@@ -34,7 +34,10 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: "temurin"
-          java-version: 11
+          # Java 17 required by Gradle
+          java-version: |
+            11
+            17
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
