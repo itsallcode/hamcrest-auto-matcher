@@ -23,7 +23,6 @@ testing {
                 }
             }
             dependencies {
-                //implementation libs.hamcrest
                 implementation project(':')
             }
         }
